@@ -1,96 +1,137 @@
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment } from 'react';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { Project } from '@/types';
+import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
 
-interface ProjectModalProps {
+export interface ProjectModalProps {
+  project: Project | null;
   isOpen: boolean;
   onClose: () => void;
-  project: {
-    title: string;
-    description: string;
-    image: string;
-    technologies: string[];
-    longDescription?: string;
-    demoLink?: string;
-    githubLink?: string;
-  };
 }
 
-export default function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleEsc);
-    return () => window.removeEventListener('keydown', handleEsc);
-  }, [onClose]);
+export function ProjectModal({ project, isOpen, onClose }: ProjectModalProps) {
+  useKeyboardShortcut('Escape', onClose, { enabled: isOpen });
 
-  if (!isOpen) return null;
+  if (!project) return null;
 
   return (
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 bg-black/50 backdrop-blur-sm animate-fadeIn"
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className="bg-white dark:bg-gray-800 rounded-xl overflow-hidden w-full max-w-4xl h-auto max-h-[calc(100vh-2rem)] flex flex-col animate-slideUp">
-        <div className="relative h-48 sm:h-64 md:h-72 lg:h-96">
-          <Image
-            src={project.image}
-            alt={project.title}
-            fill
-            className="object-cover"
-            priority
+    <Transition show={isOpen} as={Fragment}>
+      <Dialog
+        as="div"
+        className="relative z-50"
+        onClose={onClose}
+        static
+        aria-labelledby="project-modal-title"
+      >
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <div 
+            className="fixed inset-0 bg-black/25 backdrop-blur-sm" 
+            aria-hidden="true"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/20"></div>
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 p-2 rounded-full bg-black/50 hover:bg-black/70 text-white transition-colors"
-          >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div className="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-teal-400 to-blue-600 bg-clip-text text-transparent">
-            {project.title}
-          </h2>
-          <p className="text-base sm:text-lg text-gray-600 dark:text-gray-300 mb-4 sm:mb-6">
-            {project.longDescription || project.description}
-          </p>
-          <div className="flex flex-wrap gap-2 sm:gap-3 mb-6 sm:mb-8">
-            {project.technologies.map((tech) => (
-              <span
-                key={tech}
-                className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 rounded-full"
+        </Transition.Child>
+
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
+            >
+              <Dialog.Panel 
+                className="w-full max-w-3xl transform overflow-hidden rounded-2xl bg-white dark:bg-gray-800 p-6 text-left align-middle shadow-xl transition-all"
+                role="dialog"
+                aria-modal="true"
               >
-                {tech}
-              </span>
-            ))}
+                <div 
+                  className="aspect-video relative mb-6 rounded-lg overflow-hidden group"
+                  aria-hidden="true"
+                >
+                  <Image
+                    src={project.image}
+                    alt={`${project.title} project screenshot`}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
+
+                <Dialog.Title
+                  as="h3"
+                  id="project-modal-title"
+                  className="text-2xl font-semibold leading-6 text-gray-900 dark:text-gray-100 mb-4"
+                >
+                  {project.title}
+                </Dialog.Title>
+
+                <div className="mb-6">
+                  <p className="text-gray-600 dark:text-gray-300 whitespace-pre-wrap">
+                    {project.longDescription}
+                  </p>
+                </div>
+
+                <div className="flex gap-2 flex-wrap mb-6" role="list" aria-label="Technologies used">
+                  {project.technologies.map((tech) => (
+                    <span
+                      key={tech}
+                      className="px-3 py-1 text-sm bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 rounded-full"
+                      role="listitem"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex gap-4">
+                  {project.demoLink && (
+                    <a
+                      href={project.demoLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-teal-600 px-4 py-2 text-sm font-medium text-white hover:bg-teal-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 transition-colors"
+                      aria-label={`View live demo of ${project.title}`}
+                    >
+                      View Demo
+                    </a>
+                  )}
+                  {project.githubLink && (
+                    <a
+                      href={project.githubLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 transition-colors"
+                      aria-label={`View source code for ${project.title} on GitHub`}
+                    >
+                      View on GitHub
+                    </a>
+                  )}
+                  <button
+                    onClick={onClose}
+                    className="ml-auto inline-flex justify-center rounded-md border border-gray-300 dark:border-gray-600 px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2 transition-colors"
+                    aria-label="Close project details"
+                  >
+                    Close
+                  </button>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
           </div>
-          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-            {project.demoLink && (
-              <a
-                href={project.demoLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-center"
-              >
-                View Demo
-              </a>
-            )}
-            {project.githubLink && (
-              <a
-                href={project.githubLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-2 bg-gray-200 dark:bg-gray-700 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors text-center"
-              >
-                View Code
-              </a>
-            )}
-          </div>
         </div>
-      </div>
-    </div>
+      </Dialog>
+    </Transition>
   );
 }

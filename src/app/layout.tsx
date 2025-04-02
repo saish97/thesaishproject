@@ -1,32 +1,31 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import './globals.css';
+import { Inter } from 'next/font/google';
 import NavMenu from '@/components/NavMenu';
+import { ScrollProgress } from '@/components/ScrollProgress';
+import { ScrollToTop } from '@/components/ScrollToTop';
+import { AnimationProvider } from '@/components/AnimationProvider';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({ subsets: ['latin'] });
 
-export const metadata: Metadata = {
-  title: "thesaishproject",
-  description: "personal portfolio of saish",
+export const metadata = {
+  title: 'The Saish Project',
+  description: 'Digital Learning Specialist & Developer',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <NavMenu />
-        {children}
+    <html lang="en" className="scroll-smooth">
+      <body className={inter.className}>
+        <AnimationProvider>
+          <ScrollProgress />
+          <NavMenu />
+          {children}
+          <ScrollToTop />
+        </AnimationProvider>
       </body>
     </html>
   );
