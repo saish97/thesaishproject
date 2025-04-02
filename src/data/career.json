@@ -1,0 +1,73 @@
+[
+    {
+      "title": "STEM & Robotics Trainer",
+      "organization": "Premier Genie",
+      "location": "Dubai, UAE",
+      "startDate": "2016-09",
+      "endDate": "2017-02",
+      "icon": "🤖",
+      "description": "Provided training to school students in Robotics and STEM learning. Focused on foundational concepts of engineering and innovation through hands-on activities and Lego Mindstorms kits.",
+      "type": "Professional"
+    },
+    {
+      "title": "Admissions Intern",
+      "organization": "Manipal University, Dubai Campus",
+      "location": "Dubai, UAE",
+      "startDate": "2016-07",
+      "endDate": "2016-08",
+      "icon": "📞",
+      "description": "Handled telemarketing and follow-ups for potential students, closed hot leads, and assisted in processing documents for confirmed admissions.",
+      "type": "Professional"
+    },
+    {
+      "title": "General Secretary",
+      "organization": "Manipal University, Dubai Campus",
+      "location": "Dubai, UAE",
+      "startDate": "2016-09",
+      "endDate": "2017-07",
+      "icon": "🎓",
+      "description": "Led the student council operations, organized campus events, maintained meeting documentation, and ensured student discipline across intra and inter-university functions.",
+      "type": "Leadership"
+    },
+    {
+      "title": "Jaguar Land Rover 4x4 Project Intern",
+      "organization": "Yas Marina Circuit",
+      "location": "Abu Dhabi, UAE",
+      "startDate": "2017-07",
+      "endDate": "2017-12",
+      "icon": "🚗",
+      "description": "Developed baseline code and design for the Jaguar Land Rover 4x4 in Schools Technology Challenge. Supported student engineering projects that simulate real-world vehicle navigation and automation.",
+      "type": "Internship"
+    },
+    {
+      "title": "Autodesk Student Ambassador",
+      "organization": "Autodesk",
+      "location": "Dubai, UAE",
+      "startDate": "2015-12",
+      "endDate": "2018-10",
+      "icon": "📐",
+      "description": "Acted as a bridge between Autodesk and the student community. Led workshops, demos, and campus events promoting Autodesk's design software. Enabled peer learning and helped students showcase skills for better career prospects.",
+      "type": "Ambassadorship"
+    },
+    {
+      "title": "Digitization & VR Development Intern",
+      "organization": "Biz Group",
+      "location": "Dubai, UAE",
+      "startDate": "2018-06",
+      "endDate": "2018-09",
+      "icon": "🕶️",
+      "description": "Led the pilot for a VR-based team-building game aimed at corporate learning. Contributed to the early adoption of immersive experiences within learning ecosystems.",
+      "type": "Internship"
+    },
+    {
+      "title": "Digital Learning Executive",
+      "organization": "Biz Group",
+      "location": "Dubai, UAE",
+      "startDate": "2018-10",
+      "endDate": "Present",
+      "icon": "💼",
+      "description": "Driving digital transformation in learning across the MENA region. Implemented Axonify microlearning platform for 20+ clients, built AI avatars and chatbots for sales and training, delivered facilitator tech training, and led customer success initiatives. Ongoing focus on innovation, client empowerment, and the use of immersive technologies.",
+      "type": "Professional"
+    }
+  ]
+  

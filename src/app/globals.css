@@ -1,0 +1,59 @@
+@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    @apply transition-colors duration-200;
+  }
+  
+  body {
+    @apply bg-white text-gray-900 transition-colors duration-200;
+  }
+
+  html.dark body {
+    @apply bg-gray-900 text-gray-100;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-600 to-blue-600;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-fadeIn {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slideUp {
+    animation: slideUp 0.4s ease-out;
+  }
+
+  .nav-menu {
+    @apply fixed top-0 left-0 w-full h-0 bg-white dark:bg-gray-900 overflow-hidden transition-all duration-300 md:relative md:h-auto md:bg-transparent;
+  }
+
+  .nav-menu.open {
+    @apply h-screen;
+  }
+
+  .nav-links {
+    @apply flex flex-col items-center gap-6 pt-20 md:flex-row md:pt-0;
+  }
+
+  .hamburger {
+    @apply block md:hidden;
+  }
+}

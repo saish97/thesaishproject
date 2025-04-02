@@ -1,0 +1,44 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "BizGPT",
+      "description": "First version of the BizGPT project. Based on the Multipliers leadership program.",
+      "longDescription": "A more detailed description of the project, including its features, challenges, and solutions.",
+      "image": "/images/biz-gpt-1.jpg",
+      "technologies": ["HTML", "CSS", "Javascript"],
+      "demoLink": "https://bizgpt.azurewebsites.net/",
+      "githubLink": ""
+    },
+    {
+        "id": 2,
+        "title": "BizGPT2",
+        "description": "Second version of the BizGPT project. Based on a socratic coaching approach.",
+        "longDescription": "A more detailed description of the project, including its features, challenges, and solutions.",
+        "image": "/images/biz-gpt-2.jpg",
+        "technologies": ["HTML", "CSS"],
+        "demoLink": "https://bizgpt2.azurewebsites.net/",
+        "githubLink": ""
+      },
+      {
+        "id": 3,
+        "title": "Jaguar Land Rover 4x4 Challenge",
+        "description": "Built foundational tech for an educational STEM competition.",
+        "longDescription": "Developed baseline components including design and code for the Jaguar Land Rover 4x4 in Schools Technology Challenge, encouraging innovation and practical skills among young engineering students.",
+        "image": "/images/jlr-4x4.jpg",
+        "technologies": ["CAD", "STEM", "Educational Robotics"],
+        "demoLink": "https://f1-in-schools-torque.invisionzone.com/4x4/4x4-getting-started/",
+        "githubLink": ""
+      },
+      {
+        "id": 4,
+        "title": "VR Team-building Game",
+        "description": "Designed and piloted a VR-based corporate learning game.",
+        "longDescription": "Developed a Virtual Reality solution used for team-building exercises, incorporating immersive themes to enhance engagement. This early-stage pilot project demonstrated the potential for VR in experiential corporate learning.",
+        "image": "/images/demo.jpg",
+        "technologies": ["Unity", "VR", "Gamification"],
+        "demoLink": "",
+        "githubLink": ""
+      }
+  ]
+}
