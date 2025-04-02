@@ -83,7 +83,7 @@ export function Timeline({ entries }: TimelineProps) {
               <span>{entry.location}</span>
               <span>{entry.startDate} - {entry.endDate}</span>
             </div>
-            <p className="text-gray-600 dark:text-gray-300">{entry.description}</p>
+            <p className="text-gray-300 dark:text-gray-300">{entry.description}</p>
             <span 
               className={styles.type}
               role="note"

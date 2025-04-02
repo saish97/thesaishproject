@@ -37,7 +37,7 @@ export default function Home() {
         {/* Greeting Section */}
         <ParallaxSection className="min-h-[90vh] flex items-center justify-center px-4 sm:px-6 lg:px-8 pt-16">
           <div className="text-center">
-            <m.h1 
+            <m.h1
               className="text-5xl md:text-6xl font-bold mb-6 text-gray-800 dark:text-gray-200"
               variants={fadeInUp}
               initial="initial"
@@ -46,7 +46,7 @@ export default function Home() {
             >
               sup, i'm <span className="text-teal-400">saish</span>.
             </m.h1>
-            <m.p 
+            <m.p
               className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"
               variants={fadeInUp}
               initial="initial"
@@ -59,15 +59,15 @@ export default function Home() {
         </ParallaxSection>
 
         {/* Projects Section */}
-        <section 
-          className="relative py-20 px-4 sm:px-6 lg:px-8 scroll-mt-16 backdrop-blur-sm bg-gray-300/50 dark:bg-gray-700/50" 
+        <section
+          className="relative py-20 px-4 sm:px-6 lg:px-8 scroll-mt-16 backdrop-blur-sm bg-gray-300/50 dark:bg-gray-700/50"
           id="projects"
         >
           <ParallaxSection offset={30}>
             <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">
               my projects.
             </h2>
-            
+
             {projectsError && (
               <div className="max-w-7xl mx-auto mb-8">
                 <ErrorMessage message={projectsError} />
@@ -86,15 +86,15 @@ export default function Home() {
         </section>
 
         {/* Career Timeline Section */}
-        <section 
-          className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gray-200/80 dark:bg-gray-800/80 backdrop-blur-sm scroll-mt-16" 
+        <section
+          className="relative py-20 px-4 sm:px-6 lg:px-8 bg-gray-200/80 dark:bg-gray-800/80 backdrop-blur-sm scroll-mt-16"
           id="career"
         >
           <ParallaxSection offset={30}>
             <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">
               my journey.
             </h2>
-            
+
             {careerError && (
               <div className="max-w-7xl mx-auto mb-8">
                 <ErrorMessage message={careerError} />

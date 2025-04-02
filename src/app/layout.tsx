@@ -21,8 +21,8 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={inter.className}>
         <AnimationProvider>
-          <ScrollProgress />
           <NavMenu />
+          <ScrollProgress />
           {children}
           <ScrollToTop />
         </AnimationProvider>
