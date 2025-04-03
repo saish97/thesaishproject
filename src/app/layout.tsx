@@ -1,5 +1,6 @@
 import './globals.css';
 import { Inter } from 'next/font/google';
+import { Analytics } from "@vercel/analytics/react"
 import NavMenu from '@/components/NavMenu';
 import { ScrollProgress } from '@/components/ScrollProgress';
 import { ScrollToTop } from '@/components/ScrollToTop';
@@ -24,6 +25,7 @@ export default function RootLayout({
           <NavMenu />
           <ScrollProgress />
           {children}
+          <Analytics />
           <ScrollToTop />
         </AnimationProvider>
       </body>
