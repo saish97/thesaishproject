@@ -42,21 +42,21 @@ export default function NavMenu() {
               href="/about" 
               className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
             >
-              about
+              about.
             </Link>
             <a 
               href="#projects" 
               onClick={handleNavClick}
               className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
             >
-              projects
+              projects.
             </a>
             <a 
               href="#career" 
               onClick={handleNavClick}
               className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
             >
-              resume
+              career.
             </a>
           </div>
 
@@ -87,21 +87,21 @@ export default function NavMenu() {
                 onClick={() => setIsOpen(false)}
                 className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
               >
-                about
+                about.
               </Link>
               <a 
                 href="#projects" 
                 onClick={handleNavClick}
                 className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
               >
-                projects
+                projects.
               </a>
               <a 
                 href="#career" 
                 onClick={handleNavClick}
                 className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
               >
-                resume
+                career.
               </a>
             </div>
           </div>
