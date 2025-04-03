@@ -15,39 +15,39 @@ export function ContactSection() {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-300 dark:bg-gray-700" id="contact">
+    <section className="py-15 px-4 sm:px-6 lg:px-8 bg-gray-300 dark:bg-gray-700" id="contact">
       <h2 className="text-3xl font-bold text-center mb-12 text-gray-600 dark:text-gray-300">let's connect.</h2>
       <div className="max-w-3xl mx-auto">
         <div className="flex flex-col md:flex-row gap-12">
           <div className="flex-1">
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="space-y-2">
-                <label htmlFor="name" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Name</label>
+                {/* <label htmlFor="name" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Name</label> */}
                 <input
                   id="name"
                   type="text"
-                  placeholder="Your name"
+                  placeholder="Name"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 focus:ring-2 text-gray-600 dark:text-gray-300 focus:ring-teal-500 outline-none transition-all"
                   required
                   disabled={formStatus === 'submitting'}
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Email</label>
+                {/* <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Email</label> */}
                 <input
                   id="email"
                   type="email"
-                  placeholder="your@email.com"
+                  placeholder="Email"
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   required
                   disabled={formStatus === 'submitting'}
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="message" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Message</label>
+                {/* <label htmlFor="message" className="block text-sm font-medium text-gray-600 dark:text-gray-300">Message</label> */}
                 <textarea
                   id="message"
-                  placeholder="Your message"
+                  placeholder="Your Message"
                   rows={4}
                   className="w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-teal-500 outline-none transition-all"
                   required
@@ -56,7 +56,7 @@ export function ContactSection() {
               </div>
               <button
                 type="submit"
-                className="w-full px-6 py-3 rounded-lg bg-teal-400 text-gray-50 dark:text-gray-300 hover:bg-teal-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full px-6 py-3 rounded-lg bg-teal-600 text-gray-50 dark:text-gray-300 hover:bg-teal-700 transition-colors focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={formStatus === 'submitting'}
               >
                 {formStatus === 'submitting' ? 'Sending...' : 'Send Message'}

@@ -22,7 +22,7 @@
 .entry {
   position: relative;
   width: 45%;
-  margin-bottom: 4rem;
+  margin-bottom: .1rem;
   transition: all 0.3s ease-in;
   z-index: 10;
 }

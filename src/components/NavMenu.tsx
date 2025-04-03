@@ -27,11 +27,11 @@ export default function NavMenu() {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-sm z-50">
+    <nav className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm shadow-sm z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-bold text-teal-400 hover:text-teal-500 transition-colors">
+            <Link href="/" className="text-xl font-bold text-teal-600 dark:text-teal-400 hover:text-teal-500 transition-colors">
               the.saish.project
             </Link>
           </div>
@@ -76,7 +76,7 @@ export default function NavMenu() {
           {/* Mobile Navigation */}
           <div 
             className={`
-              md:hidden fixed inset-0 top-16 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
+              md:hidden fixed inset-0 top-16 bg-white/95 dark:bg-gray-700/95 backdrop-blur-sm
               transition-transform duration-300 ease-in-out transform 
               ${isOpen ? 'translate-x-0' : 'translate-x-full'}
             `}

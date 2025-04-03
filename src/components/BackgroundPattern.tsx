@@ -1,80 +1,99 @@
 'use client';
-
-import { LazyMotion, m, useScroll, useTransform, domAnimation } from 'framer-motion';
-import { useRef } from 'react';
-import { PatternVariant } from '@/types';
+import { useEffect, useRef } from 'react';
 
 interface BackgroundPatternProps {
   className?: string;
-  variant?: PatternVariant;
+  dotColor?: string;
+}
+
+interface Dot {
+    x: number;
+    y: number;
+    size: number;
+    opacity: number;
 }
 
 export function BackgroundPattern({ 
-  className = '', 
-  variant = 'dots' 
+    className = '',
+    dotColor = 'rgb(20 184 166 / 0.5)'
 }: BackgroundPatternProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start end", "end start"]
-  });
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.15, 0.2, 0.15]);
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
-  const getPattern = () => {
-    switch (variant) {
-      case 'grid':
-        return (
-          <svg className="w-24 h-24 transform rotate-45" viewBox="0 0 32 32">
-            <path
-              fill="currentColor"
-              d="M0 0h2v2H0zM8 8h2v2H8zM16 16h2v2h-2zM24 24h2v2h-2z"
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        // Set canvas dimensions to match window
+        const setCanvasSize = (): void => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        };
+        
+        setCanvasSize();
+        window.addEventListener('resize', setCanvasSize);
+
+        // Create dots
+        const dotCount: number = 200;
+        const dots: Dot[] = [];
+        
+        for (let i = 0; i < dotCount; i++) {
+            dots.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: 1.5 + Math.random() * 1.5,
+                opacity: 0.2 + Math.random() * 0.2
+            });
+        }
+
+        // Simple animation
+        let animationFrame: number;
+        const animate = (): void => {
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw dots with very subtle movement
+            const time: number = Date.now() * 0.0005;
+            
+            dots.forEach((dot: Dot, index: number) => {
+                const offsetX: number = Math.sin(time + index * 0.2) * 20;
+                const offsetY: number = Math.cos(time + index * 0.2) * 20;
+                
+                ctx.beginPath();
+                ctx.arc(
+                    dot.x + offsetX, 
+                    dot.y + offsetY, 
+                    dot.size, 
+                    0, 
+                    Math.PI * 2
+                );
+                ctx.fillStyle = dotColor.replace('0.3', dot.opacity.toString());
+                ctx.fill();
+            });
+            
+            animationFrame = requestAnimationFrame(animate);
+        };
+        
+        animate();
+        
+        // Cleanup
+        return () => {
+            window.removeEventListener('resize', setCanvasSize);
+            cancelAnimationFrame(animationFrame);
+        };
+    }, [dotColor]);
+
+    return (
+        <div 
+            className={`fixed inset-0 pointer-events-none overflow-hidden ${className}`}
+            aria-hidden="true"
+        >
+            <canvas 
+                ref={canvasRef} 
+                className="absolute inset-0" 
             />
-          </svg>
-        );
-      case 'waves':
-        return (
-          <svg className="w-48 h-48" viewBox="0 0 64 64">
-            <path
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1"
-              d="M0 32c8.89-8.89 17.78-8.89 26.67 0C35.55 40.89 44.44 40.89 53.33 32"
-            />
-          </svg>
-        );
-      default:
-        return (
-          <svg className="w-12 h-12" viewBox="0 0 16 16">
-            <circle cx="8" cy="8" r="1.5" fill="currentColor" />
-          </svg>
-        );
-    }
-  };
-
-  return (
-    <LazyMotion features={domAnimation}>
-      <m.div
-        ref={ref}
-        style={{ 
-          y, 
-          opacity,
-          willChange: 'transform, opacity' 
-        }}
-        className={`fixed inset-0 pointer-events-none text-gray-900/10 dark:text-gray-100/10 overflow-hidden ${className}`}
-        aria-hidden="true"
-      >
-        <div className="absolute inset-0">
-          <div className="w-full h-full flex flex-wrap gap-8 transform rotate-12">
-            {Array.from({ length: 100 }).map((_, i) => (
-              <div key={i} className="flex-none">
-                {getPattern()}
-              </div>
-            ))}
-          </div>
         </div>
-      </m.div>
-    </LazyMotion>
-  );
+    );
 }
