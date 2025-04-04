@@ -77,7 +77,7 @@ export default function NavMenu() {
           <div 
             className={`
               md:hidden fixed inset-0 top-16 bg-white/95 dark:bg-gray-700/95 backdrop-blur-sm
-              transition-transform duration-300 ease-in-out transform 
+              transition3d duration-300 ease-in-out transform 
               ${isOpen ? 'translate-x-0' : 'translate-x-full'}
             `}
           >
