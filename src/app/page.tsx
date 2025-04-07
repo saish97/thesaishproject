@@ -62,9 +62,13 @@ export default function Home() {
           className="relative py-15 px-4 sm:px-6 lg:px-8 scroll-mt-16 backdrop-blur-xs bg-gray-300/50 dark:bg-gray-700/10"
           id="projects"
         >
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">
+          <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
             projects.
           </h2>
+
+          <h4 className="text-sm font-bold text-center mb-12 text-gray-800 dark:text-gray-200">
+            click to learn more.
+          </h4>
 
           {projectsError && (
             <div className="max-w-7xl mx-auto mb-8">
