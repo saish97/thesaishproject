@@ -50,7 +50,10 @@ export function ProjectGrid({ projects, onProjectClick }: ProjectGridProps) {
               loading="lazy"
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover"
+              className="object-cover transition-transform duration-500"
+              quality={85}
+              placeholder="blur"
+              blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0IDMiPjwvc3ZnPg=="
             />
             <m.div 
               className="absolute inset-0 bg-gradient-to-t from-teal-400/50 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300" 
