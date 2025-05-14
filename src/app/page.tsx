@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { m } from 'framer-motion';
 import { ProjectSkeleton } from '@/components/ProjectSkeleton';
 import { ContactSection } from '@/components/ContactSection';
@@ -19,10 +19,10 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleProjectClick = (project: Project) => {
+  const handleProjectClick = useCallback((project: Project) => {
     setSelectedProject(project);
     setIsModalOpen(true);
-  };
+  }, []);
 
   return (
     <main className="min-h-screen bg-neutral-300 dark:bg-neutral-950 overflow-hidden">

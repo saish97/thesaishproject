@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useRef, useCallback } from 'react';
+import { debounce } from '@/utils/debounce'; // Import debounce
 
 // --- Interfaces ---
 interface BackgroundPatternProps {
@@ -196,14 +197,14 @@ export function BackgroundPattern({
   useEffect(() => {
     initCanvas(); // Initial setup
 
-    const handleResize = () => {
+    const debouncedResizeHandler = debounce(() => { // Debounce the resize handler
         initCanvas(); // Re-initialize on resize
         // Restart animation if it was running
         if (animationFrameRef.current) {
              cancelAnimationFrame(animationFrameRef.current);
              animationFrameRef.current = requestAnimationFrame(animate);
         }
-    };
+    }, 250); // 250ms debounce delay
 
     const handleMouseMove = (event: MouseEvent) => {
       // Adjust mouse coordinates for canvas scaling
@@ -220,7 +221,7 @@ export function BackgroundPattern({
       mouseRef.current = { x: null, y: null };
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener('resize', debouncedResizeHandler); // Use debounced handler
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseout', handleMouseOut);
 
@@ -229,7 +230,7 @@ export function BackgroundPattern({
 
     // Cleanup function
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('resize', debouncedResizeHandler); // Clean up debounced handler
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseout', handleMouseOut);
       if (animationFrameRef.current) {
