@@ -34,7 +34,11 @@ export const GET = async () => {
     }
 
     const response: ProjectsResponse = { data };
-    return NextResponse.json(response);
+    return NextResponse.json(response, {
+      headers: {
+        'Cache-Control': 'public, max-age=300, stale-while-revalidate=600',
+      },
+    });
   } catch (error) {
     console.error('Projects API Error:', error);
     const errorResponse: ProjectsResponse = {

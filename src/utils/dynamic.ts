@@ -1,7 +1,5 @@
 import dynamic from 'next/dynamic';
-import { ProjectModalProps } from '@/components/ProjectModal';
-import { TimelineProps } from '@/components/Timeline';
-import { ProjectGridProps } from '@/components/ProjectGrid';
+import type { ProjectModalProps, TimelineProps, ProjectGridProps } from '@/components';
 
 export const ProjectModal = dynamic<ProjectModalProps>(() => 
   import('@/components/ProjectModal').then(mod => ({ default: mod.ProjectModal })), {

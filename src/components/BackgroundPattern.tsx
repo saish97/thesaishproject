@@ -85,7 +85,8 @@ export function BackgroundPattern({
   const animationFrameRef = useRef<number | undefined>(undefined);
 
   // --- Configuration ---
-  const PARTICLE_COUNT = 100; // Number of particles
+  // Lower particle count on small screens for performance
+  const PARTICLE_COUNT = typeof window !== 'undefined' && window.innerWidth < 768 ? 60 : 100; // Number of particles
   const MAX_LINE_DISTANCE = 120; // Max distance for lines between particles
   const MOUSE_INTERACTION_RADIUS = 180; // Radius for mouse interaction lines
 
@@ -222,6 +223,17 @@ export function BackgroundPattern({
     };
 
     window.addEventListener('resize', debouncedResizeHandler); // Use debounced handler
+
+    // Pause animation when tab is hidden to save resources
+    const handleVisibility = () => {
+      if (document.hidden) {
+        if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+        animationFrameRef.current = undefined;
+      } else {
+        animationFrameRef.current = requestAnimationFrame(animate);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('mouseout', handleMouseOut);
 
@@ -231,8 +243,9 @@ export function BackgroundPattern({
     // Cleanup function
     return () => {
       window.removeEventListener('resize', debouncedResizeHandler); // Clean up debounced handler
-      window.removeEventListener('mousemove', handleMouseMove);
+  window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseout', handleMouseOut);
+  document.removeEventListener('visibilitychange', handleVisibility);
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }

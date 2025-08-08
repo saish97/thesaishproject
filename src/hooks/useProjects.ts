@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from 'react';
 import { Project, ProjectsResponse } from '@/types';
 

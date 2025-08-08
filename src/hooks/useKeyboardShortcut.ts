@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useCallback } from 'react';
 
 type KeyHandler = (event: KeyboardEvent) => void;

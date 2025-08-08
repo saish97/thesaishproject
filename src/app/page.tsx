@@ -2,13 +2,8 @@
 
 import { useState, useCallback } from 'react';
 import { m } from 'framer-motion';
-import { ProjectSkeleton } from '@/components/ProjectSkeleton';
-import { ContactSection } from '@/components/ContactSection';
-import { TimelineSkeleton } from '@/components/TimelineSkeleton';
-import { ErrorMessage } from '@/components/ErrorMessage';
-import { BackgroundPattern } from '@/components/BackgroundPattern';
-import { useProjects } from '@/hooks/useProjects';
-import { useCareer } from '@/hooks/useCareer';
+import { ProjectSkeleton, ContactSection, TimelineSkeleton, ErrorMessage, BackgroundPattern } from '@/components';
+import { useProjects, useCareer } from '@/hooks';
 import { Project } from '@/types';
 import { fadeInUp } from '@/utils/animations';
 import { ProjectModal, Timeline, ProjectGrid } from '@/utils/dynamic';
@@ -25,11 +20,9 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-neutral-300 dark:bg-neutral-950 overflow-hidden">
-      {/* Background Patterns */}
+    <main id="main-content" className="min-h-screen bg-neutral-300 dark:bg-neutral-950 overflow-hidden">
+      {/* Background Pattern (single instance for performance) */}
       <BackgroundPattern className="z-0" />
-      <BackgroundPattern className="z-0 translate-x-1/2" />
-      <BackgroundPattern className="z-0 -translate-x-1/2" />
 
       {/* Main Content */}
       <div className="relative z-10">
@@ -43,7 +36,8 @@ export default function Home() {
               animate="animate"
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              sup, i'm <span className="text-teal-600 dark:text-teal-400">saish</span>.
+              <span className="sr-only">Hello, I'm Saish — Digital Learning Specialist & Developer</span>
+              <span aria-hidden>sup, i'm <span className="text-teal-600 dark:text-teal-400">saish</span>.</span>
             </m.h1>
             <m.p
               className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto"

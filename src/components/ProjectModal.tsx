@@ -2,7 +2,7 @@ import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import Image from 'next/image';
 import { Project } from '@/types';
-import { useKeyboardShortcut } from '@/hooks/useKeyboardShortcut';
+import { useKeyboardShortcut } from '@/hooks';
 
 export interface ProjectModalProps {
   project: Project | null;

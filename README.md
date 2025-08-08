@@ -35,11 +35,26 @@ The application will be available at [http://localhost:3000](http://localhost:30
 
 ## Project Structure
 
-```
-├── app/          # Next.js app directory
-├── components/   # Reusable UI components
-├── public/       # Static assets
-└── styles/       # Global styles
+Key folders under `src/`:
+
+- `app/` — Next.js App Router pages, layouts, api routes
+- `components/` — UI components (with a barrel `index.ts`)
+- `hooks/` — React hooks (with a barrel `index.ts`)
+- `utils/` — Utility functions and dynamic component loader (with a barrel `index.ts`)
+- `data/` — Static JSON data read by API routes
+- `public/images/` — Image assets referenced by the app
+
+Housekeeping done:
+- Removed unused: `src/components/Timeline.module.css`
+- Removed empty/unused: `src/utils/companyLogos.ts`
+- Removed unused public SVGs: `public/{file,globe,next,vercel,window}.svg`
+
+Imports now favor barrels and the `@` alias:
+
+```ts
+import { NavMenu, AnimationProvider } from '@/components';
+import { useProjects } from '@/hooks';
+import { fadeInUp } from '@/utils';
 ```
 
 ## Features
