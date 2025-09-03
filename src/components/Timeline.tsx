@@ -197,8 +197,7 @@ export function Timeline({ entries }: TimelineProps) {
           ))}
         </div>
 
-        {/* Bottom progress bar */}
-        <m.div className="fixed left-0 right-0 bottom-0 h-1 bg-teal-500/30" style={{ scaleX: progressX, transformOrigin: '0%' }} aria-hidden="true" />
+        {/* Progress handled globally by ScrollProgress */}
       </div>
     </div>
   );

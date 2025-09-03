@@ -5,7 +5,7 @@ const nextConfig = {
   // swcMinify: true,
   devIndicators: false, // Disable the React DevTools overlay in development mode
   images: {
-  domains: ['upload.wikimedia.org'], // allow Wikipedia-hosted logos
+    domains: [], // add external domains here if you host images off-site
   },
   compress: true,
   output: 'standalone',

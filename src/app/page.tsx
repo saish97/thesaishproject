@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <main id="main-content" className="min-h-screen bg-neutral-300 dark:bg-neutral-950 overflow-hidden">
       {/* Background Pattern (single instance for performance) */}
-      <BackgroundPattern className="z-0" />
+      <BackgroundPattern />
 
       {/* Main Content */}
       <div className="relative z-10">
@@ -53,7 +53,7 @@ export default function Home() {
 
         {/* Projects Section */}
         <section
-          className="relative py-15 px-4 sm:px-6 lg:px-8 scroll-mt-16 backdrop-blur-xs bg-gray-300/50 dark:bg-gray-700/10"
+          className="relative py-16 px-4 sm:px-6 lg:px-8 scroll-mt-16 backdrop-blur-sm bg-neutral-200/50 dark:bg-neutral-800/50"
           id="projects"
         >
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-gray-200">
@@ -82,7 +82,7 @@ export default function Home() {
 
         {/* Career Timeline Section */}
         <section
-          className="relative py-15 px-4 sm:px-6 lg:px-8 bg-gray-200/50 dark:bg-gray-800/50 backdrop-blur-xs scroll-mt-16"
+          className="relative py-16 px-4 sm:px-6 lg:px-8 bg-neutral-200/50 dark:bg-neutral-800/50 backdrop-blur-sm scroll-mt-16"
           id="career"
         >
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">
@@ -105,9 +105,7 @@ export default function Home() {
         </section>
 
         {/* Contact Section */}
-        <section className="relative backdrop-blur-xs bg-gray-300/50 dark:bg-neutral-700/50">
-          <ContactSection />
-        </section>
+        <ContactSection />
       </div>
 
       <ProjectModal

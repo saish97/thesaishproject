@@ -49,8 +49,8 @@ export function ContactSection() {
   };
 
   return (
-    <section className="py-15 px-4 sm:px-6 lg:px-8 bg-gray-300 dark:bg-gray-700" id="contact">
-      <h2 className="text-3xl font-bold text-center mb-12 text-gray-600 dark:text-gray-300">let's connect.</h2>
+    <section className="relative py-16 px-4 sm:px-6 lg:px-8 backdrop-blur-sm bg-neutral-200/50 dark:bg-neutral-800/50" id="contact">
+      <h2 className="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-200">let's connect.</h2>
       <div className="max-w-3xl mx-auto">
         <div className="flex flex-col md:flex-row gap-12">
           <div className="flex-1">
