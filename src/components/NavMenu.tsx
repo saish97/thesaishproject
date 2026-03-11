@@ -17,11 +17,24 @@ export default function NavMenu() {
       const storedTheme = localStorage.getItem('theme');
       
       if (storedTheme) {
-        setIsDarkMode(storedTheme === 'dark');
+        const isDark = storedTheme === 'dark';
+        setIsDarkMode(isDark);
+        // Immediately apply the class to prevent flash
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       } else {
         // If no stored theme, check system preference
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
         setIsDarkMode(prefersDark);
+        // Immediately apply the class to prevent flash
+        if (prefersDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
       }
     }
   }, []);

@@ -1,26 +1,33 @@
-@import 'tailwindcss';
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss"; /* Tailwind v4 single import (removed legacy @tailwind directives) */
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    @apply transition-colors duration-200;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
   
   body {
-    @apply bg-white text-gray-900 transition-colors duration-200;
+  background-color: theme('colors.white');
+  color: theme('colors.gray.900');
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   html.dark body {
-    @apply bg-gray-900 text-gray-100;
+  background-color: theme('colors.gray.900');
+  color: theme('colors.gray.100');
   }
 }
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-teal-400 to-blue-600;
+    background-image: linear-gradient(to right, #2dd4bf, #2563eb); /* teal-400 to blue-600 */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 
   @keyframes fadeIn {
@@ -33,27 +40,26 @@
     to { transform: translateY(0); opacity: 1; }
   }
 
-  .animate-fadeIn {
-    animation: fadeIn 0.3s ease-out;
-  }
+  .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+  .animate-slideUp { animation: slideUp 0.4s ease-out; }
 
-  .animate-slideUp {
-    animation: slideUp 0.4s ease-out;
-  }
-
+  /* Navigation menu (matches Tailwind utility intent without @apply) */
   .nav-menu {
-    @apply fixed top-0 left-0 w-full h-0 bg-white dark:bg-gray-900 overflow-hidden transition-all duration-300 md:relative md:h-auto md:bg-transparent;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    overflow: hidden;
+    transition: all 300ms cubic-bezier(0.4,0,0.2,1);
+    z-index: 50;
   }
-
-  .nav-menu.open {
-    @apply h-screen;
-  }
-
-  .nav-links {
-    @apply flex flex-col items-center gap-6 pt-20 md:flex-row md:pt-0;
-  }
-
-  .hamburger {
-    @apply block md:hidden;
+  .dark .nav-menu { background-color: #111827; } /* gray-900 */
+  .nav-menu.open { height: 100vh; }
+  @media (min-width: 768px) {
+    .nav-menu { position: relative; height: auto; background-color: transparent; }
+    .dark .nav-menu { background-color: transparent; }
   }
 }
