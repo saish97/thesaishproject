@@ -1,0 +1,126 @@
+{
+    "skills": {
+        "skillsMatrix": [
+            {
+                "category": "Digital Learning & L&D",
+                "skills": [
+                    {
+                        "name": "Learning Experience Design",
+                        "proficiency": "Expert",
+                        "context": "6+ years at Biz Group designing and deploying digital learning programs"
+                    },
+                    {
+                        "name": "Microlearning Platforms (Axonify)",
+                        "proficiency": "Expert",
+                        "context": "Implementation across 20+ clients, training & tech support"
+                    },
+                    {
+                        "name": "eLearning Asset Creation",
+                        "proficiency": "Advanced",
+                        "context": "Video, digital content design, cross-functional team collaboration"
+                    },
+                    {
+                        "name": "AI-driven Learning Tools",
+                        "proficiency": "Advanced",
+                        "context": "AI tools influencing workplace behavior & engagement"
+                    }
+                ]
+            },
+            {
+                "category": "Technology & Innovation",
+                "skills": [
+                    {
+                        "name": "AI and Emerging Tech Integration",
+                        "proficiency": "Advanced",
+                        "context": "Focus on AI, Metaverse, and digital transformation"
+                    },
+                    {
+                        "name": "Innovation Pilots / POCs",
+                        "proficiency": "Advanced",
+                        "context": "Built and piloted learning tech innovations with early adopters"
+                    },
+                    {
+                        "name": "VR-based Corporate Learning",
+                        "proficiency": "Intermediate",
+                        "context": "VR team-building project lead"
+                    }
+                ]
+            },
+            {
+                "category": "Project & Client Work",
+                "skills": [
+                    {
+                        "name": "Client Enablement & Training",
+                        "proficiency": "Advanced",
+                        "context": "Enabled independent client usage of learning platforms"
+                    },
+                    {
+                        "name": "Customer Success",
+                        "proficiency": "Advanced",
+                        "context": "Ensured renewals and high satisfaction through support initiatives"
+                    }
+                ]
+            },
+            {
+                "category": "Technical Knowledge",
+                "skills": [
+                    {
+                        "name": "Networking (CCNA, CCNP-RS)",
+                        "proficiency": "Intermediate",
+                        "context": "Certified, with applied projects"
+                    },
+                    {
+                        "name": "Hardware & IT Support",
+                        "proficiency": "Intermediate",
+                        "context": "Certified and supported tech systems"
+                    },
+                    {
+                        "name": "Coding/Development",
+                        "proficiency": "Basic-Intermediate",
+                        "context": "VR pilot & JLR project"
+                    }
+                ]
+            },
+            {
+                "category": "Leadership & Soft Skills",
+                "skills": [
+                    {
+                        "name": "Strategic Thinking & Digital Strategy",
+                        "proficiency": "Advanced",
+                        "context": "Role demands business-oriented tech decisions"
+                    },
+                    {
+                        "name": "Communication & Coordination",
+                        "proficiency": "Advanced",
+                        "context": "Led student council, client liaison, cross-team collaboration"
+                    },
+                    {
+                        "name": "Multilingual Communication",
+                        "proficiency": "Advanced",
+                        "context": "English, Hindi (Pro), Marathi (Native), French, Arabic"
+                    }
+                ]
+            },
+            {
+                "category": "Certifications",
+                "skills": [
+                    {
+                        "name": "Certified Metaverse Expert",
+                        "proficiency": "-",
+                        "context": "Blockchain Council"
+                    },
+                    {
+                        "name": "CCNA & CCNP (Cisco)",
+                        "proficiency": "-",
+                        "context": "Valid technical base"
+                    },
+                    {
+                        "name": "DELF (French)",
+                        "proficiency": "-",
+                        "context": "Limited Working Proficiency"
+                    }
+                ]
+            }
+        ]
+    }
+}

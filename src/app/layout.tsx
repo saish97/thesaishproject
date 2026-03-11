@@ -5,11 +5,22 @@ import { Analytics } from "@vercel/analytics/react";
 import { NavMenu, ScrollProgress, ScrollToTop, AnimationProvider } from '@/components';
 
 const inter = Inter({ subsets: ['latin'] });
+const resolvedSiteUrl = (() => {
+  const envUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.VERCEL_URL;
+
+  if (!envUrl) {
+    return 'http://localhost:3000';
+  }
+
+  return envUrl.startsWith('http://') || envUrl.startsWith('https://')
+    ? envUrl
+    : `https://${envUrl}`;
+})();
 
 export const metadata: Metadata = {
   title: 'The Saish Project',
   description: 'Digital Learning Specialist & Developer',
-  metadataBase: process.env.NEXT_PUBLIC_SITE_URL ? new URL(process.env.NEXT_PUBLIC_SITE_URL) : undefined,
+  metadataBase: new URL(resolvedSiteUrl),
   robots: {
     index: true,
     follow: true,

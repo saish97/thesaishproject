@@ -1,0 +1,65 @@
+@import "tailwindcss"; /* Tailwind v4 single import (removed legacy @tailwind directives) */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  body {
+  background-color: theme('colors.white');
+  color: theme('colors.gray.900');
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  html.dark body {
+  background-color: theme('colors.gray.900');
+  color: theme('colors.gray.100');
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background-image: linear-gradient(to right, #2dd4bf, #2563eb); /* teal-400 to blue-600 */
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .animate-fadeIn { animation: fadeIn 0.3s ease-out; }
+  .animate-slideUp { animation: slideUp 0.4s ease-out; }
+
+  /* Navigation menu (matches Tailwind utility intent without @apply) */
+  .nav-menu {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 0;
+    background-color: #ffffff;
+    overflow: hidden;
+    transition: all 300ms cubic-bezier(0.4,0,0.2,1);
+    z-index: 50;
+  }
+  .dark .nav-menu { background-color: #111827; } /* gray-900 */
+  .nav-menu.open { height: 100vh; }
+  @media (min-width: 768px) {
+    .nav-menu { position: relative; height: auto; background-color: transparent; }
+    .dark .nav-menu { background-color: transparent; }
+  }
+}
