@@ -1,4 +1,7 @@
+'use client';
+
 import { m } from 'framer-motion';
+import { cx, surfaceClasses } from './ui';
 
 interface ErrorMessageProps {
   message: string;
@@ -8,40 +11,38 @@ interface ErrorMessageProps {
 
 const severityStyles = {
   error: {
-    bg: 'bg-red-50 dark:bg-red-900/20',
-    text: 'text-red-600 dark:text-red-400',
-    icon: '❌'
+    badge: 'error',
+    title: 'could not load this section',
   },
   warning: {
-    bg: 'bg-yellow-50 dark:bg-yellow-900/20',
-    text: 'text-yellow-600 dark:text-yellow-400',
-    icon: '⚠️'
+    badge: 'warning',
+    title: 'something needs attention',
   },
   info: {
-    bg: 'bg-blue-50 dark:bg-blue-900/20',
-    text: 'text-blue-600 dark:text-blue-400',
-    icon: 'ℹ️'
-  }
+    badge: 'info',
+    title: 'quick note',
+  },
 };
 
-export function ErrorMessage({ 
-  message, 
-  severity = 'error',
-  className = '' 
-}: ErrorMessageProps) {
+export function ErrorMessage({ message, severity = 'error', className = '' }: ErrorMessageProps) {
   const styles = severityStyles[severity];
 
   return (
-    <m.div 
-      className={`flex items-center justify-center p-4 rounded-lg ${styles.bg} ${className}`}
+    <m.div
+      className={cx(surfaceClasses.card, 'flex items-start gap-4 p-5', className)}
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 10 }}
       role="alert"
       aria-live="polite"
     >
-      <span className="mr-2" aria-hidden="true">{styles.icon}</span>
-      <p className={styles.text}>{message}</p>
+      <span className="tag-pill" style={{ minWidth: 'fit-content' }}>
+        {styles.badge}
+      </span>
+      <div>
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-accent">{styles.title}</p>
+        <p className="mt-2 text-sm leading-7 text-dim">{message}</p>
+      </div>
     </m.div>
   );
 }

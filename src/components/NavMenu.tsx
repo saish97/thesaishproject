@@ -1,279 +1,233 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import type { MouseEvent } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { cx, iconButtonClassName, surfaceClasses } from './ui';
+
+const pageLinks = [
+  { href: '/about', label: 'about.' },
+  { href: '/thoughts', label: 'thoughts.' },
+];
+
+const sectionLinks = [
+  { href: '/#projects', label: 'projects.' },
+  { href: '/#career', label: 'career.' },
+  { href: '/#contact', label: 'contact.' },
+];
+
+const navLinkClassName = 'inline-flex items-center rounded-full px-4 py-2 text-sm font-medium text-dim transition-colors hover:text-accent';
 
 export default function NavMenu() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const pathname = usePathname();
+  const [isThemeReady, setIsThemeReady] = useState(false);
 
-  // Initialize theme from localStorage and system preference
   useEffect(() => {
-    // Check if localStorage is available
     const hasLocalStorage = typeof window !== 'undefined' && window.localStorage;
-    
-    if (hasLocalStorage) {
-      // Check if theme is stored in localStorage
-      const storedTheme = localStorage.getItem('theme');
-      
-      if (storedTheme) {
-        const isDark = storedTheme === 'dark';
-        setIsDarkMode(isDark);
-        // Immediately apply the class to prevent flash
-        if (isDark) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      } else {
-        // If no stored theme, check system preference
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setIsDarkMode(prefersDark);
-        // Immediately apply the class to prevent flash
-        if (prefersDark) {
-          document.documentElement.classList.add('dark');
-        } else {
-          document.documentElement.classList.remove('dark');
-        }
-      }
+
+    if (!hasLocalStorage) {
+      setIsThemeReady(true);
+      return;
     }
+
+    const storedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldUseDark = storedTheme ? storedTheme === 'dark' : prefersDark;
+
+    setIsDarkMode(shouldUseDark);
+    document.documentElement.classList.toggle('dark', shouldUseDark);
+    setIsThemeReady(true);
   }, []);
 
-  // Update HTML class when theme changes
   useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
+    if (!isThemeReady) {
+      return;
     }
-  }, [isDarkMode]);
 
-  // Enable/disable scroll when menu is opened/closed
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     }
+  }, [isDarkMode, isThemeReady]);
+
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+
     return () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
-  
-  const handleThemeToggle = () => {
-    setIsDarkMode(prev => !prev);
-  };
 
-  const handleNavClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleThemeToggle = useCallback(() => {
+    setIsDarkMode((current) => !current);
+  }, []);
+
+  const handleNavClick = useCallback((e: MouseEvent<HTMLAnchorElement>) => {
     const href = e.currentTarget.getAttribute('href');
     const hashIndex = href?.indexOf('#') ?? -1;
 
-    if (href && hashIndex !== -1) {
-      const targetId = href.slice(hashIndex + 1);
-
-      if (pathname !== '/') {
-        setIsOpen(false);
-        return;
-      }
-
-      e.preventDefault();
-      const element = document.getElementById(targetId);
-      if (element) {
-        const offset = 80; // Height of the fixed header plus some padding
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth"
-        });
-      }
-
+    if (!href || hashIndex === -1) {
       setIsOpen(false);
       return;
+    }
+
+    if (pathname !== '/') {
+      setIsOpen(false);
+      return;
+    }
+
+    e.preventDefault();
+
+    const targetId = href.slice(hashIndex + 1);
+    const element = document.getElementById(targetId);
+
+    if (element) {
+      const offset = 110;
+      const offsetPosition = element.getBoundingClientRect().top + window.scrollY - offset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      });
     }
 
     setIsOpen(false);
   }, [pathname]);
 
-  // Handle keyboard navigation in menu
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Escape') {
-      setIsOpen(false);
-    }
-  };
+  const allLinks = useMemo(() => [...pageLinks, ...sectionLinks], []);
+
+  const isPathActive = useCallback(
+    (href: string) => {
+      if (href.startsWith('/#')) {
+        return false;
+      }
+
+      return pathname === href;
+    },
+    [pathname],
+  );
 
   return (
-    <nav className="fixed top-0 left-0 right-0 bg-white/80 dark:bg-neutral-900/80 backdrop-blur-sm shadow-sm z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
-          <div className="flex items-center">
-            <Link 
-              href="/" 
-              className="text-xl font-bold text-teal-600 dark:text-teal-400 hover:text-teal-500 transition-colors"
-              aria-current="page"
-              title="The Saish Project home"
-            >
-              the.saish.project
-            </Link>
-          </div>
+    <nav className="fixed inset-x-4 top-4 z-50">
+      <div className={cx(surfaceClasses.card, 'surface-glass mx-auto flex max-w-7xl items-center justify-between rounded-full px-4 py-3 md:px-5')}>
+        <Link
+          href="/"
+          className="rounded-full px-3 py-2 text-[0.95rem] font-semibold text-ink transition-colors hover:text-accent"
+          style={{ fontFamily: 'var(--font-display), serif' }}
+          aria-label="The Saish Project home"
+        >
+          the.saish.project
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link 
-              href="/about" 
-              className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
-            >
-              about.
-            </Link>
-            <Link 
-              href="/thoughts" 
-              className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
-            >
-              thoughts.
-            </Link>
-            <a 
-              href="/#projects" 
-              onClick={handleNavClick}
-              className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
-            >
-              projects.
-            </a>
-            <a 
-              href="/#career" 
-              onClick={handleNavClick}
-              className="px-3 py-2 rounded-md text-gray-900 dark:text-gray-100 hover:text-teal-400 transition-colors"
-            >
-              career.
-            </a>
-            <button
-              onClick={handleThemeToggle}
-              className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-              title={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {isDarkMode ? (
-                <SunIcon className="h-5 w-5" />
-              ) : (
-                <MoonIcon className="h-5 w-5" />
-              )}
-            </button>
-          </div>
+        <div className="hidden items-center gap-1 md:flex">
+          {allLinks.map((link) => {
+            const active = isPathActive(link.href);
 
-          {/* Mobile Menu with Theme Toggle and Hamburger */}
-          <div className="md:hidden flex items-center space-x-2">
-            <button
-              onClick={handleThemeToggle}
-              className="p-2 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              {isDarkMode ? (
-                <SunIcon className="h-5 w-5" />
-              ) : (
-                <MoonIcon className="h-5 w-5" />
-              )}
-            </button>
-            <button 
-              className="p-2 rounded-md text-gray-900 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              onClick={() => setIsOpen(!isOpen)}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-              aria-expanded={isOpen}
-              aria-controls="mobile-menu"
-            >
-              <div className={`w-6 h-0.5 bg-current transition-transform duration-300 ${isOpen ? 'rotate-45 translate-y-1.5' : ''}`} />
-              <div className={`w-6 h-0.5 bg-current my-1 transition-opacity duration-300 ${isOpen ? 'opacity-0' : ''}`} />
-              <div className={`w-6 h-0.5 bg-current transition-transform duration-300 ${isOpen ? '-rotate-45 -translate-y-1.5' : ''}`} />
-            </button>
-          </div>
+            if (link.href.startsWith('/#')) {
+              return (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={handleNavClick}
+                  className={navLinkClassName}
+                >
+                  <span
+                    className="rounded-full px-2 py-1"
+                    style={active ? { background: 'rgba(var(--accent-rgb), 0.1)', color: 'var(--accent)' } : undefined}
+                  >
+                    {link.label}
+                  </span>
+                </a>
+              );
+            }
 
-          {/* Mobile Navigation */}
-          <div 
-            id="mobile-menu"
-            className={`
-              md:hidden fixed inset-0 top-16 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm
-              transition-all duration-500 ease-in-out transform 
-              ${isOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10 pointer-events-none'}
-            `}
-            aria-hidden={!isOpen}
-            onKeyDown={handleKeyDown}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Navigation menu"
+            return (
+              <Link key={link.href} href={link.href} className={navLinkClassName} aria-current={active ? 'page' : undefined}>
+                <span
+                  className="rounded-full px-2 py-1"
+                  style={active ? { background: 'rgba(var(--accent-rgb), 0.1)', color: 'var(--accent)' } : undefined}
+                >
+                  {link.label}
+                </span>
+              </Link>
+            );
+          })}
+
+          <button
+            type="button"
+            onClick={handleThemeToggle}
+            className={cx(iconButtonClassName, 'ml-2 h-11 w-11')}
+            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
           >
-            <div className="flex flex-col items-center pt-8 space-y-4 w-full px-6">
-              <Link 
-                href="/about" 
-                onClick={() => setIsOpen(false)}
-                className={`
-                  w-full py-3 px-4 rounded-lg bg-gray-100 dark:bg-gray-800 
-                  text-center text-gray-900 dark:text-gray-100 
-                  hover:bg-teal-50 dark:hover:bg-teal-900/30 
-                  hover:text-teal-600 dark:hover:text-teal-400 
-                  transition-all duration-300 ease-in-out
-                  transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}
-                  delay-[100ms]
-                `}
-                tabIndex={isOpen ? 0 : -1}
-                aria-label="About page"
-              >
-                about.
-              </Link>
-              <Link 
-                href="/thoughts" 
-                onClick={() => setIsOpen(false)}
-                className={`
-                  w-full py-3 px-4 rounded-lg bg-gray-100 dark:bg-gray-800 
-                  text-center text-gray-900 dark:text-gray-100 
-                  hover:bg-teal-50 dark:hover:bg-teal-900/30 
-                  hover:text-teal-600 dark:hover:text-teal-400 
-                  transition-all duration-300 ease-in-out
-                  transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}
-                  delay-[200ms]
-                `}
-                tabIndex={isOpen ? 0 : -1}
-                aria-label="Thoughts page"
-              >
-                thoughts.
-              </Link>
-              <a 
-                href="/#projects" 
-                onClick={handleNavClick}
-                className={`
-                  w-full py-3 px-4 rounded-lg bg-gray-100 dark:bg-gray-800 
-                  text-center text-gray-900 dark:text-gray-100 
-                  hover:bg-teal-50 dark:hover:bg-teal-900/30 
-                  hover:text-teal-600 dark:hover:text-teal-400 
-                  transition-all duration-300 ease-in-out
-                  transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}
-                  delay-[300ms]
-                `}
-                tabIndex={isOpen ? 0 : -1}
-                aria-label="Projects section"
-              >
-                projects.
-              </a>
-              <a 
-                href="/#career" 
-                onClick={handleNavClick}
-                className={`
-                  w-full py-3 px-4 rounded-lg bg-gray-100 dark:bg-gray-800 
-                  text-center text-gray-900 dark:text-gray-100 
-                  hover:bg-teal-50 dark:hover:bg-teal-900/30 
-                  hover:text-teal-600 dark:hover:text-teal-400 
-                  transition-all duration-300 ease-in-out
-                  transform ${isOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 translate-y-8 scale-95'}
-                  delay-[400ms]
-                `}
-                tabIndex={isOpen ? 0 : -1}
-                aria-label="Career section"
-              >
-                career.
-              </a>
-            </div>
+            {isDarkMode ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+          </button>
+        </div>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <button
+            type="button"
+            onClick={handleThemeToggle}
+            className={cx(iconButtonClassName, 'h-11 w-11')}
+            aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {isDarkMode ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsOpen((current) => !current)}
+            className={cx(iconButtonClassName, 'h-11 w-11')}
+            aria-label={isOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+          >
+            <span className="sr-only">Toggle navigation</span>
+            <div className={cx('h-0.5 w-5 bg-current transition-transform duration-300', isOpen && 'translate-y-[7px] rotate-45')} />
+            <div className={cx('my-1.5 h-0.5 w-5 bg-current transition-opacity duration-300', isOpen && 'opacity-0')} />
+            <div className={cx('h-0.5 w-5 bg-current transition-transform duration-300', isOpen && '-translate-y-[7px] -rotate-45')} />
+          </button>
+        </div>
+      </div>
+
+      <div
+        id="mobile-menu"
+        className={cx(
+          'mx-auto mt-3 max-w-7xl transition-all duration-300 md:hidden',
+          isOpen ? 'pointer-events-auto translate-y-0 opacity-100' : 'pointer-events-none -translate-y-4 opacity-0',
+        )}
+        aria-hidden={!isOpen}
+      >
+        <div className={cx(surfaceClasses.panel, 'overflow-hidden p-3')}>
+          <div className="grid gap-2">
+            {allLinks.map((link, index) => {
+              const active = isPathActive(link.href);
+              const sharedClassName = cx(
+                'rounded-[1.25rem] px-4 py-3 text-sm font-medium transition-colors',
+                active ? 'text-accent' : 'text-ink hover:text-accent',
+              );
+
+              const style = active
+                ? { background: 'rgba(var(--accent-rgb), 0.1)' }
+                : { background: 'rgba(var(--bg-rgb), 0.28)', transitionDelay: `${index * 35}ms` };
+
+              if (link.href.startsWith('/#')) {
+                return (
+                  <a key={link.href} href={link.href} onClick={handleNavClick} className={sharedClassName} style={style}>
+                    {link.label}
+                  </a>
+                );
+              }
+
+              return (
+                <Link key={link.href} href={link.href} onClick={() => setIsOpen(false)} className={sharedClassName} style={style}>
+                  {link.label}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -283,19 +237,11 @@ export default function NavMenu() {
 
 function SunIcon({ className }: { className?: string }) {
   return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      fill="none" 
-      viewBox="0 0 24 24" 
-      strokeWidth={1.5} 
-      stroke="currentColor" 
-      className={className}
-      aria-hidden="true"
-    >
-      <path 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
-        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" 
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className} aria-hidden="true">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
       />
     </svg>
   );
@@ -303,19 +249,11 @@ function SunIcon({ className }: { className?: string }) {
 
 function MoonIcon({ className }: { className?: string }) {
   return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" 
-      fill="none" 
-      viewBox="0 0 24 24" 
-      strokeWidth={1.5} 
-      stroke="currentColor" 
-      className={className}
-      aria-hidden="true"
-    >
-      <path 
-        strokeLinecap="round" 
-        strokeLinejoin="round" 
-        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" 
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className} aria-hidden="true">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
       />
     </svg>
   );

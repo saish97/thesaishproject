@@ -1,9 +1,10 @@
 'use client';
 
-import { m, useScroll, useSpring } from 'framer-motion';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { m } from 'framer-motion';
+import { useEffect, useMemo, useState } from 'react';
 import { CareerEntry, CareerEntryType } from '@/types';
-import { fadeInUp, springTransition } from '@/utils/animations';
+import { fadeInUp } from '@/utils/animations';
+import { TagPill, cx, inputClassName, surfaceClasses, textLinkClassName } from './ui';
 
 export interface TimelineProps {
   entries: CareerEntry[];
@@ -14,184 +15,220 @@ type Filters = {
   types: Set<CareerEntryType>;
 };
 
-// Use the same chip language as Projects (teal chip)
-const chipClass = 'px-3 py-1 text-sm bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 rounded-full';
-const sortEntriesByStartDateDesc = (a: CareerEntry, b: CareerEntry) =>
-  b.startDate.localeCompare(a.startDate) || b.endDate.localeCompare(a.endDate);
+const normalizeEndDate = (value: string) => (value === 'Present' ? '9999-12' : value);
+const buildEntryKey = (entry: CareerEntry) => `${entry.organization}-${entry.title}-${entry.startDate}`;
+const sortEntriesByStartDateDesc = (firstEntry: CareerEntry, secondEntry: CareerEntry) =>
+  secondEntry.startDate.localeCompare(firstEntry.startDate) || normalizeEndDate(secondEntry.endDate).localeCompare(normalizeEndDate(firstEntry.endDate));
 
 export function Timeline({ entries }: TimelineProps) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: containerRef, offset: ['start end', 'end end'] });
-  const progressX = useSpring(scrollYProgress, { ...springTransition, restDelta: 0.001 });
-
-  const allTypes = useMemo(() => Array.from(new Set(entries.map(e => e.type))), [entries]);
-
+  const allTypes = useMemo(() => Array.from(new Set(entries.map((entry) => entry.type))), [entries]);
   const [filters, setFilters] = useState<Filters>({ search: '', types: new Set(allTypes) });
-  const [expanded, setExpanded] = useState<Set<number>>(new Set());
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    // keep types in sync if data changes
-    setFilters(f => ({ ...f, types: new Set(allTypes) }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [entries.length]);
+    setFilters((current) => ({ ...current, types: new Set(allTypes) }));
+  }, [allTypes]);
 
-  const toggleType = (t: CareerEntryType) => {
-    setFilters(prev => {
-      const next = new Set(prev.types);
-      if (next.has(t)) next.delete(t); else next.add(t);
-      return { ...prev, types: next };
-    });
-  };
-
-  const clearTypes = () => setFilters(prev => ({ ...prev, types: new Set(allTypes) }));
-
-  const filtered = useMemo(() => {
+  const filteredEntries = useMemo(() => {
     const query = filters.search.trim().toLowerCase();
-    return entries.filter(e =>
-      filters.types.has(e.type) && (
+
+    return entries.filter((entry) => {
+      const matchesType = filters.types.has(entry.type);
+      const matchesSearch =
         !query ||
-        e.title.toLowerCase().includes(query) ||
-        e.organization.toLowerCase().includes(query) ||
-        e.location.toLowerCase().includes(query) ||
-        e.description.toLowerCase().includes(query)
-      )
-    );
+        entry.title.toLowerCase().includes(query) ||
+        entry.organization.toLowerCase().includes(query) ||
+        entry.location.toLowerCase().includes(query) ||
+        entry.description.toLowerCase().includes(query);
+
+      return matchesType && matchesSearch;
+    });
   }, [entries, filters]);
 
-  // Group by year (startDate assumed YYYY-MM)
-  const grouped = useMemo(() => {
-    const map = new Map<string, CareerEntry[]>();
-    for (const e of filtered) {
-      const year = (e.startDate || '').slice(0, 4) || 'Unknown';
-      if (!map.has(year)) map.set(year, []);
-      map.get(year)!.push(e);
-    }
-    return Array.from(map.entries())
-      .map(([year, yearEntries]) => [year, [...yearEntries].sort(sortEntriesByStartDateDesc)] as [string, CareerEntry[]])
-      .sort((a, b) => Number(b[0]) - Number(a[0]));
-  }, [filtered]);
+  const groupedEntries = useMemo(() => {
+    const groupedMap = new Map<string, CareerEntry[]>();
 
-  if (!entries?.length) return null;
+    for (const entry of filteredEntries) {
+      const year = entry.startDate.slice(0, 4) || 'Unknown';
+      const currentEntries = groupedMap.get(year) ?? [];
+      currentEntries.push(entry);
+      groupedMap.set(year, currentEntries);
+    }
+
+    return Array.from(groupedMap.entries())
+      .map(([year, yearEntries]) => [year, [...yearEntries].sort(sortEntriesByStartDateDesc)] as [string, CareerEntry[]])
+      .sort((firstYear, secondYear) => Number(secondYear[0]) - Number(firstYear[0]));
+  }, [filteredEntries]);
+
+  if (!entries.length) {
+    return null;
+  }
 
   return (
-    <div ref={containerRef} className="relative max-w-6xl mx-auto px-2 sm:px-4">
-      {/* Top controls */}
-      <div className="mb-6 flex flex-col md:flex-row items-stretch md:items-center gap-3">
-        <div className="flex-1">
-          <label htmlFor="timeline-search" className="sr-only">Search timeline</label>
-          <input
-            id="timeline-search"
-            type="search"
-            placeholder="Search by role, organization, location..."
-            value={filters.search}
-            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-            className="w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-neutral-900 px-3 py-2 text-sm text-gray-900 dark:text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
-            aria-label="Search career entries"
-          />
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <button
-            onClick={clearTypes}
-            className="px-3 py-1.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-500"
-            aria-label="Show all entry types"
-          >
-            All
-          </button>
-      {allTypes.map(t => (
-            <button
-              key={t}
-              onClick={() => toggleType(t)}
-        className={`px-3 py-1.5 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors ${filters.types.has(t) ? 'bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200' : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200'}`}
-              aria-pressed={filters.types.has(t)}
-              aria-label={`Toggle type ${t}`}
-            >
-              {t}
-            </button>
-          ))}
+    <div className="space-y-6">
+      <div className={cx(surfaceClasses.card, 'p-4 md:p-5')}>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+            <div className="w-full lg:max-w-sm">
+              <label htmlFor="timeline-search" className="sr-only">
+                Search career entries
+              </label>
+              <input
+                id="timeline-search"
+                type="search"
+                placeholder="Search by role, organization, or location"
+                value={filters.search}
+                onChange={(event) => setFilters((current) => ({ ...current, search: event.target.value }))}
+                className={inputClassName}
+                aria-label="Search career entries"
+              />
+            </div>
+
+            <div className="surface-scroll -mx-1 flex flex-nowrap gap-2 overflow-x-auto px-1 pb-1 lg:flex-1">
+              <button
+                type="button"
+                onClick={() => setFilters((current) => ({ ...current, types: new Set(allTypes) }))}
+                className={cx(filters.types.size === allTypes.length ? 'tag-pill' : 'tag-pill-muted', 'shrink-0 transition-colors')}
+              >
+                all
+              </button>
+              {allTypes.map((type) => {
+                const active = filters.types.has(type);
+
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    onClick={() => {
+                      setFilters((current) => {
+                        const nextTypes = new Set(current.types);
+                        if (nextTypes.has(type)) {
+                          nextTypes.delete(type);
+                        } else {
+                          nextTypes.add(type);
+                        }
+                        return { ...current, types: nextTypes };
+                      });
+                    }}
+                    aria-pressed={active}
+                    className={cx(active ? 'tag-pill' : 'tag-pill-muted', 'shrink-0 transition-colors')}
+                  >
+                    {type}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-dim" aria-live="polite">
+            {filteredEntries.length} {filteredEntries.length === 1 ? 'entry' : 'entries'}
+          </p>
         </div>
       </div>
 
-      <div className="mb-4 text-sm text-gray-600 dark:text-gray-300" aria-live="polite">
-        {filtered.length} entr{filtered.length === 1 ? 'y' : 'ies'}
-      </div>
+      <div className="relative pl-9 sm:pl-11">
+        <div
+          className="absolute bottom-0 left-4 top-1 w-px"
+          style={{ background: 'linear-gradient(180deg, rgba(var(--accent-rgb), 0.12), rgba(var(--accent-rgb), 0.5), rgba(var(--accent-rgb), 0.12))' }}
+          aria-hidden="true"
+        />
 
-      {/* Vertical timeline rail */}
-      <div className="relative">
-        <div className="absolute left-4 sm:left-1/2 sm:-translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-teal-400/60 to-teal-600/60" aria-hidden="true" />
-
-        <div className="space-y-12">
-          {grouped.map(([year, yearEntries]) => (
-            <section key={year} aria-labelledby={`year-${year}`}>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
-                <h3 id={`year-${year}`} className="text-sm font-semibold uppercase tracking-wider text-gray-700 dark:text-gray-300">{year}</h3>
-                <div className="h-px flex-1 bg-gray-200 dark:bg-gray-800" />
+        <div className="space-y-10">
+          {groupedEntries.map(([year, yearEntries]) => (
+            <section key={year} aria-labelledby={`year-${year}`} className="space-y-4">
+              <div className="flex items-center gap-3">
+                <TagPill tone="muted" id={`year-${year}`} className="text-[0.7rem] tracking-[0.22em]">
+                  {year}
+                </TagPill>
+                <div className="divider-line flex-1" />
               </div>
 
-              <ol className="relative space-y-12">
-                {yearEntries.map((entry, idx) => {
-                  const id = `${year}-${idx}`;
-                  const isExpanded = expanded.has(idx + yearEntries.length); // stable-ish key
-                  const side = (idx % 2 === 0) ? 'left' : 'right';
+              <ol className="space-y-5">
+                {yearEntries.map((entry) => {
+                  const key = buildEntryKey(entry);
+                  const isExpanded = expanded.has(key);
+
                   return (
                     <m.li
-                      key={id}
+                      key={key}
                       variants={fadeInUp}
-                      custom={side === 'left'}
                       initial="initial"
                       whileInView="animate"
                       viewport={{ once: true, margin: '-10% 0px' }}
-                      className="relative grid grid-cols-1 sm:grid-cols-2 gap-6"
-                      role="article"
-                      aria-labelledby={`timeline-entry-${id}`}
+                      className="relative pl-4"
                     >
-                      {/* Connector dot */}
-                      <div className={`absolute left-4 sm:left-1/2 sm:-translate-x-1/2 top-3 w-3 h-3 rounded-full ring-4 ring-white dark:ring-neutral-900 bg-teal-500`} aria-hidden="true" />
+                      <div
+                        className="absolute top-8 h-3 w-3 rounded-full"
+                        style={{ left: '-1.45rem', background: 'var(--accent)', boxShadow: '0 0 0 8px rgba(var(--bg-rgb), 0.9)' }}
+                        aria-hidden="true"
+                      />
 
-                      {/* Card */}
-                      <div className={`${side === 'left' ? 'sm:col-start-1' : 'sm:col-start-2'} sm:max-w-[38rem] ${side === 'left' ? 'sm:pr-8' : 'sm:pl-8'}`}>
-                        <div className="group rounded-xl overflow-hidden bg-white dark:bg-gray-800 shadow-lg hover:shadow-2xl transition-all border border-gray-100 dark:border-gray-700">
-                          <div className="p-5">
-                            <div className="flex items-start gap-3">
-                              <div className="flex h-10 w-10 items-center justify-center rounded-full border border-teal-300 bg-white dark:bg-neutral-900 text-xl" aria-hidden="true">{entry.icon}</div>
-                              <div className="min-w-0">
-                                <h4 id={`timeline-entry-${id}`} className="text-xl font-semibold text-gray-600 dark:text-gray-300 group-hover:text-teal-400 transition-colors">
-                                  {entry.title}
-                                  <span className="sr-only"> at {entry.organization}</span>
-                                </h4>
-                                <p className="text-sm text-gray-600 dark:text-gray-300">{entry.organization}</p>
-                              </div>
-                              <span className={`ml-auto shrink-0 ${chipClass}`} role="note" aria-label={`Experience type: ${entry.type}`}>{entry.type}</span>
-                            </div>
+                      <m.article className={cx(surfaceClasses.card, surfaceClasses.interactive, 'p-5 md:p-6 lg:p-7')}>
+                        <div className="flex flex-wrap items-start gap-4">
+                          <div
+                            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[rgba(var(--accent-rgb),0.16)] text-xl"
+                            style={{ background: 'rgba(var(--accent-rgb), 0.08)' }}
+                            aria-hidden="true"
+                          >
+                            {entry.icon}
+                          </div>
 
-                            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-600 dark:text-gray-300">
-                              <span className="inline-flex items-center gap-1"><CalendarIcon className="h-4 w-4" /> {entry.startDate} – {entry.endDate}</span>
-                              <span className="inline-flex items-center gap-1"><LocationIcon className="h-4 w-4" /> {entry.location}</span>
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <p className="eyebrow">career note</p>
+                              <TagPill className="ml-auto hidden md:inline-flex">{entry.type}</TagPill>
                             </div>
-
-                            <div className="relative mt-4">
-                              <p className={`${isExpanded ? '' : 'max-h-20 overflow-hidden'} text-gray-600 dark:text-gray-300`}>{entry.description}</p>
-                              {!isExpanded && (
-                                <div className="pointer-events-none absolute inset-x-0 -bottom-1 h-10 bg-gradient-to-t from-white dark:from-gray-800 to-transparent" aria-hidden="true" />
-                              )}
-                              <button
-                                onClick={() => setExpanded(prev => {
-                                  const next = new Set(prev);
-                                  const key = idx + yearEntries.length;
-                                  if (next.has(key)) next.delete(key); else next.add(key);
-                                  return next;
-                                })}
-                                className="mt-3 text-sm font-medium text-teal-700 dark:text-teal-400 hover:underline focus:outline-none focus:ring-2 focus:ring-teal-500 rounded"
-                                aria-expanded={isExpanded}
-                                aria-controls={`desc-${id}`}
-                              >
-                                {isExpanded ? 'Show less' : 'Show more'}
-                              </button>
-                              <div id={`desc-${id}`} className="sr-only">Full description toggle region</div>
-                            </div>
+                            <h4 className="mt-3 max-w-[18ch] text-[1.85rem] leading-[1.03] text-ink md:text-[2rem]">{entry.title}</h4>
+                            <p className="mt-2 text-base font-medium text-dim">{entry.organization}</p>
                           </div>
                         </div>
-                      </div>
+
+                        <div className="mt-5 flex flex-wrap gap-2">
+                          <TagPill tone="muted">
+                            <CalendarIcon className="h-3.5 w-3.5" />
+                            {entry.startDate} - {entry.endDate}
+                          </TagPill>
+                          <TagPill tone="muted">
+                            <LocationIcon className="h-3.5 w-3.5" />
+                            {entry.location}
+                          </TagPill>
+                          <TagPill className="md:hidden">{entry.type}</TagPill>
+                        </div>
+
+                        <div className="relative mt-5">
+                          <p id={`desc-${key}`} className={cx('text-sm leading-7 text-dim md:text-base', !isExpanded && 'max-h-24 overflow-hidden')}>
+                            {entry.description}
+                          </p>
+                          {!isExpanded ? (
+                            <div
+                              className="pointer-events-none absolute inset-x-0 bottom-0 h-12"
+                              style={{ background: 'linear-gradient(180deg, rgba(var(--surface-rgb), 0), rgba(var(--surface-rgb), 0.92))' }}
+                              aria-hidden="true"
+                            />
+                          ) : null}
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setExpanded((current) => {
+                              const next = new Set(current);
+                              if (next.has(key)) {
+                                next.delete(key);
+                              } else {
+                                next.add(key);
+                              }
+                              return next;
+                            });
+                          }}
+                          className={`mt-4 inline-flex items-center gap-2 text-sm font-semibold ${textLinkClassName}`}
+                          aria-expanded={isExpanded}
+                          aria-controls={`desc-${key}`}
+                        >
+                          {isExpanded ? 'show less' : 'show more'}
+                          <span aria-hidden>{isExpanded ? '\u2191' : '\u2192'}</span>
+                        </button>
+                      </m.article>
                     </m.li>
                   );
                 })}
@@ -199,8 +236,6 @@ export function Timeline({ entries }: TimelineProps) {
             </section>
           ))}
         </div>
-
-        {/* Progress handled globally by ScrollProgress */}
       </div>
     </div>
   );
@@ -208,13 +243,20 @@ export function Timeline({ entries }: TimelineProps) {
 
 const CalendarIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-    <path fillRule="evenodd" d="M6.75 3a.75.75 0 0 1 .75.75V5h9V3.75a.75.75 0 1 1 1.5 0V5h.75A2.25 2.25 0 0 1 21 7.25v11.5A2.25 2.25 0 0 1 18.75 21H5.25A2.25 2.25 0 0 1 3 18.75V7.25A2.25 2.25 0 0 1 5.25 5H6V3.75A.75.75 0 0 1 6.75 3Zm-1.5 7.5a.75.75 0 0 0-.75.75v7.5c0 .414.336.75.75.75h13.5a.75.75 0 0 0 .75-.75v-7.5a.75.75 0 0 0-.75-.75H5.25Z" clipRule="evenodd" />
+    <path
+      fillRule="evenodd"
+      d="M6.75 3a.75.75 0 0 1 .75.75V5h9V3.75a.75.75 0 1 1 1.5 0V5h.75A2.25 2.25 0 0 1 21 7.25v11.5A2.25 2.25 0 0 1 18.75 21H5.25A2.25 2.25 0 0 1 3 18.75V7.25A2.25 2.25 0 0 1 5.25 5H6V3.75A.75.75 0 0 1 6.75 3Zm-1.5 7.5a.75.75 0 0 0-.75.75v7.5c0 .414.336.75.75.75h13.5a.75.75 0 0 0 .75-.75v-7.5a.75.75 0 0 0-.75-.75H5.25Z"
+      clipRule="evenodd"
+    />
   </svg>
 );
 
 const LocationIcon = ({ className }: { className?: string }) => (
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className} aria-hidden="true">
-    <path fillRule="evenodd" d="M11.47.659a.75.75 0 0 1 1.06 0l9 9a.75.75 0 1 1-1.06 1.06L12 2.309 3.53 10.72a.75.75 0 0 1-1.06-1.06l9-9ZM12 6a7.5 7.5 0 0 1 7.5 7.5v7.125a1.875 1.875 0 0 1-1.875 1.875h-11.25A1.875 1.875 0 0 1 4.5 20.625V13.5A7.5 7.5 0 0 1 12 6Z" clipRule="evenodd" />
+    <path
+      fillRule="evenodd"
+      d="M11.54 22.351a.75.75 0 0 0 .92 0c4.392-3.598 6.79-7.011 6.79-10.102a7.25 7.25 0 1 0-14.5 0c0 3.091 2.398 6.504 6.79 10.102ZM12 9a2.25 2.25 0 1 0 0 4.5A2.25 2.25 0 0 0 12 9Z"
+      clipRule="evenodd"
+    />
   </svg>
 );
-

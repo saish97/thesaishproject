@@ -1,10 +1,23 @@
 import './globals.css';
-import { Inter } from 'next/font/google';
+import { IBM_Plex_Sans, Newsreader } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
-import { Analytics } from "@vercel/analytics/react";
-import { NavMenu, ScrollProgress, ScrollToTop, AnimationProvider } from '@/components';
+import type { ReactNode } from 'react';
+import { Analytics } from '@vercel/analytics/react';
+import { AnimationProvider, BackgroundPattern, NavMenu, ScrollProgress, ScrollToTop } from '@/components';
 
-const inter = Inter({ subsets: ['latin'] });
+const bodyFont = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-body',
+  display: 'swap',
+});
+
+const displayFont = Newsreader({
+  subsets: ['latin'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
 const resolvedSiteUrl = (() => {
   const envUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.VERCEL_URL;
 
@@ -19,7 +32,7 @@ const resolvedSiteUrl = (() => {
 
 export const metadata: Metadata = {
   title: 'The Saish Project',
-  description: 'Digital Learning Specialist & Developer',
+  description: 'Digital Learning Specialist, AI Architect Lead, and developer.',
   metadataBase: new URL(resolvedSiteUrl),
   robots: {
     index: true,
@@ -30,7 +43,7 @@ export const metadata: Metadata = {
     url: '/',
     title: 'The Saish Project',
     siteName: 'The Saish Project',
-    description: 'Digital Learning Specialist & Developer',
+    description: 'Digital Learning Specialist, AI Architect Lead, and developer.',
     images: [
       {
         url: '/images/biz-logo.jpg',
@@ -43,7 +56,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'The Saish Project',
-    description: 'Digital Learning Specialist & Developer',
+    description: 'Digital Learning Specialist, AI Architect Lead, and developer.',
     images: ['/images/biz-logo.jpg'],
   },
   icons: {
@@ -58,27 +71,27 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+    { media: '(prefers-color-scheme: light)', color: '#f3ede4' },
+    { media: '(prefers-color-scheme: dark)', color: '#101816' },
   ],
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={inter.className}>
-        {/* Skip link for keyboard users */}
+    <html lang="en" className={`${bodyFont.variable} ${displayFont.variable} scroll-smooth`}>
+      <body>
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-teal-600 focus:text-white focus:px-3 focus:py-2 focus:rounded"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--accent)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
         >
           Skip to content
         </a>
         <AnimationProvider>
+          <BackgroundPattern />
           <NavMenu />
           <ScrollProgress />
           {children}

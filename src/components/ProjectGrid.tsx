@@ -1,7 +1,12 @@
-import Image from "next/image";
-import { m } from "framer-motion";
-import { Project } from "@/types";
-import { fadeInUp, staggerChildren, scaleOnHover } from "@/utils/animations";
+'use client';
+
+import type { KeyboardEvent } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { m } from 'framer-motion';
+import { Project } from '@/types';
+import { fadeInUp, scaleOnHover, staggerChildren } from '@/utils/animations';
+import { TagPill, cx, iconButtonClassName, surfaceClasses, textLinkClassName } from './ui';
 
 export interface ProjectGridProps {
   projects: Project[];
@@ -9,84 +14,160 @@ export interface ProjectGridProps {
 }
 
 export function ProjectGrid({ projects, onProjectClick }: ProjectGridProps) {
-  if (!projects.length) return null;
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(projects.length > 1);
 
-  const handleKeyPress = (e: React.KeyboardEvent<HTMLDivElement>, project: Project) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
+  const updateScrollState = useCallback(() => {
+    const track = trackRef.current;
+
+    if (!track) {
+      return;
+    }
+
+    setCanScrollPrev(track.scrollLeft > 8);
+    setCanScrollNext(track.scrollLeft + track.clientWidth < track.scrollWidth - 8);
+  }, []);
+
+  useEffect(() => {
+    updateScrollState();
+
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+
+    const onResize = () => updateScrollState();
+
+    track.addEventListener('scroll', updateScrollState, { passive: true });
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      track.removeEventListener('scroll', updateScrollState);
+      window.removeEventListener('resize', onResize);
+    };
+  }, [projects.length, updateScrollState]);
+
+  if (!projects.length) {
+    return null;
+  }
+
+  const handleKeyPress = (event: KeyboardEvent<HTMLElement>, project: Project) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
       onProjectClick(project);
     }
   };
 
+  const scrollTrack = (direction: -1 | 1) => {
+    const track = trackRef.current;
+    if (!track) {
+      return;
+    }
+
+    const firstCard = track.querySelector<HTMLElement>('[data-project-card]');
+    const scrollAmount = firstCard ? firstCard.offsetWidth + 20 : track.clientWidth * 0.9;
+
+    track.scrollBy({
+      left: direction * scrollAmount,
+      behavior: 'smooth',
+    });
+  };
+
   return (
-    <m.div 
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto"
-      role="grid"
-      aria-label="Projects grid"
-      variants={staggerChildren}
-      initial="initial"
-      animate="animate"
-    >
-      {projects.map((project) => (
-        <m.div
-          key={project.id}
-          onClick={() => onProjectClick(project)}
-          onKeyDown={(e) => handleKeyPress(e, project)}
-          className="group relative bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 cursor-pointer max-w-sm mx-auto focus-within:ring-2 focus-within:ring-teal-500"
-          role="gridcell"
-          tabIndex={0}
-          aria-label={`${project.title} project - Click to view details`}
-          variants={fadeInUp}
-          whileHover="hover"
-          whileTap="tap"
-        >
-          <m.div 
-            className="aspect-video relative overflow-hidden"
-            variants={scaleOnHover}
+    <div className="space-y-4">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm leading-7 text-dim">Use the arrows, trackpad, or touch scroll to move through the work.</p>
+
+        <div className="hidden items-center gap-2 sm:flex">
+          <button
+            type="button"
+            onClick={() => scrollTrack(-1)}
+            className={cx(iconButtonClassName, 'h-11 w-11 disabled:cursor-not-allowed disabled:opacity-40')}
+            disabled={!canScrollPrev}
+            aria-label="Scroll projects backward"
           >
-            <Image
-              src={project.image}
-              alt={`Screenshot of ${project.title} project`}
-              loading="lazy"
-              fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-transform duration-500"
-              quality={85}
-              placeholder="blur"
-              blurDataURL="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0IDMiPjwvc3ZnPg=="
-            />
-            <m.div 
-              className="absolute inset-0 bg-gradient-to-t from-teal-400/50 to-transparent opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-300" 
-              aria-hidden="true"
-            />
-          </m.div>
-          <div className="p-6">
-            <h3 className="text-xl font-semibold mb-2 text-gray-600 dark:text-gray-300 group-hover:text-teal-400 group-focus-within:text-teal-400 transition-colors">
-              {project.title}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300 mb-4">
-              {project.description}
-            </p>
-            <m.div 
-              className="flex gap-2 flex-wrap" 
-              role="list" 
-              aria-label="Technologies used"
-              variants={staggerChildren}
-            >
-              {project.technologies.map((tech) => (
-                <m.span
-                  key={tech}
-                  className="px-3 py-1 text-sm bg-teal-100 dark:bg-teal-900 text-teal-800 dark:text-teal-200 rounded-full"
-                  role="listitem"
-                  variants={fadeInUp}
-                >
-                  {tech}
-                </m.span>
-              ))}
+            <span aria-hidden>&larr;</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollTrack(1)}
+            className={cx(iconButtonClassName, 'h-11 w-11 disabled:cursor-not-allowed disabled:opacity-40')}
+            disabled={!canScrollNext}
+            aria-label="Scroll projects forward"
+          >
+            <span aria-hidden>&rarr;</span>
+          </button>
+        </div>
+      </div>
+
+      <m.div
+        ref={trackRef}
+        className="carousel-scroll -mx-1 grid auto-cols-[16.75rem] grid-flow-col gap-5 overflow-x-auto px-1 pb-2 pr-5 snap-x snap-mandatory sm:auto-cols-[18rem] md:pr-7 lg:auto-cols-[19rem] lg:pr-9 xl:auto-cols-[20rem]"
+        role="grid"
+        aria-label="Projects carousel"
+        variants={staggerChildren}
+        initial="initial"
+        animate="animate"
+      >
+        {projects.map((project) => (
+          <m.article
+            key={project.id}
+            data-project-card
+            role="button"
+            tabIndex={0}
+            aria-label={`${project.title} project. View details.`}
+            onClick={() => onProjectClick(project)}
+            onKeyDown={(event) => handleKeyPress(event, project)}
+            className={cx(
+              surfaceClasses.card,
+              surfaceClasses.interactive,
+              'group flex h-full min-h-[35.75rem] cursor-pointer snap-start flex-col overflow-hidden',
+            )}
+            variants={fadeInUp}
+            whileHover="hover"
+            whileTap="tap"
+          >
+            <m.div className="relative aspect-[5/4] overflow-hidden border-b border-[var(--border)]" variants={scaleOnHover}>
+              <Image
+                src={project.image}
+                alt={`Screenshot of ${project.title}`}
+                fill
+                sizes="(max-width: 768px) 18.25rem, (max-width: 1280px) 20rem, 21rem"
+                className="object-cover transition-transform duration-500"
+                quality={88}
+                loading="lazy"
+              />
+              <div
+                className="absolute inset-0 opacity-80"
+                style={{ background: 'linear-gradient(180deg, transparent 24%, rgba(16, 24, 22, 0.18) 100%)' }}
+                aria-hidden="true"
+              />
             </m.div>
-          </div>
-        </m.div>
-      ))}
-    </m.div>
+
+            <div className="flex flex-1 flex-col p-6">
+              <div className="flex-1">
+                <p className="eyebrow">selected work</p>
+                <h3 className="mt-4 max-w-[12ch] text-[1.95rem] leading-[1.02] text-ink">{project.title}</h3>
+                <p className="mt-4 text-[0.98rem] leading-7 text-dim">{project.description}</p>
+              </div>
+
+              <div className="mt-6 flex min-h-[5.5rem] flex-wrap content-start gap-2">
+                {project.technologies.map((tech) => (
+                  <TagPill key={tech}>{tech}</TagPill>
+                ))}
+              </div>
+
+              <div className="mt-6 flex items-center justify-between border-t border-[var(--border)] pt-5 text-sm font-medium">
+                <span className={textLinkClassName}>view details</span>
+                <span className="text-dim transition-transform duration-200 group-hover:translate-x-1 group-hover:text-accent" aria-hidden="true">
+                  &rarr;
+                </span>
+              </div>
+            </div>
+          </m.article>
+        ))}
+      </m.div>
+    </div>
   );
 }
