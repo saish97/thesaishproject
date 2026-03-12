@@ -79,11 +79,12 @@ export default function Home() {
             <Image
               src="/images/saish-portrait.png"
               alt="Saish Gaonkar"
-              width={1042}
-              height={720}
+              width={420}
+              height={470}
               className="h-auto w-full rounded-tl-2xl object-cover object-top grayscale"
               style={{ borderTopRightRadius: '2rem' }}
               priority
+              fetchPriority="high"
             />
             {/* Bottom fade so it merges into the card behind the stat boxes */}
             {/* <div

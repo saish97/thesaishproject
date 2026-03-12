@@ -104,17 +104,17 @@ export function ProjectGrid({ projects, onProjectClick }: ProjectGridProps) {
       <m.div
         ref={trackRef}
         className="carousel-scroll -mx-1 grid auto-cols-[16.75rem] grid-flow-col gap-5 overflow-x-auto px-1 pb-2 pr-5 snap-x snap-mandatory sm:auto-cols-[18rem] md:pr-7 lg:auto-cols-[19rem] lg:pr-9 xl:auto-cols-[20rem]"
-        role="grid"
+        role="list"
         aria-label="Projects carousel"
         variants={staggerChildren}
         initial="initial"
         animate="animate"
       >
         {projects.map((project) => (
-          <m.article
+          <m.div
             key={project.id}
             data-project-card
-            role="button"
+            role="listitem"
             tabIndex={0}
             aria-label={`${project.title} project. View details.`}
             onClick={() => onProjectClick(project)}
@@ -135,7 +135,7 @@ export function ProjectGrid({ projects, onProjectClick }: ProjectGridProps) {
                 fill
                 sizes="(max-width: 768px) 18.25rem, (max-width: 1280px) 20rem, 21rem"
                 className="object-cover transition-transform duration-500"
-                quality={88}
+                quality={75}
                 loading="lazy"
               />
               <div
@@ -165,7 +165,7 @@ export function ProjectGrid({ projects, onProjectClick }: ProjectGridProps) {
                 </span>
               </div>
             </div>
-          </m.article>
+          </m.div>
         ))}
       </m.div>
     </div>

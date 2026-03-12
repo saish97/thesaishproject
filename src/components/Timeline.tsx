@@ -178,7 +178,7 @@ export function Timeline({ entries }: TimelineProps) {
                               <p className="eyebrow">career note</p>
                               <TagPill className="ml-auto hidden md:inline-flex">{entry.type}</TagPill>
                             </div>
-                            <h4 className="mt-3 max-w-[18ch] text-[1.85rem] leading-[1.03] text-ink md:text-[2rem]">{entry.title}</h4>
+                            <h3 className="mt-3 max-w-[18ch] text-[1.85rem] leading-[1.03] text-ink md:text-[2rem]">{entry.title}</h3>
                             <p className="mt-2 text-base font-medium text-dim">{entry.organization}</p>
                           </div>
                         </div>

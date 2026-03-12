@@ -9,22 +9,22 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.0",
-    "@vercel/analytics": "^1.5.0",
-    "colorthief": "^2.6.0",
-    "framer-motion": "^12.6.3",
-    "next": "15.2.8",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "@headlessui/react": "^2.2.9",
+    "@vercel/analytics": "^2.0.0",
+    "colorthief": "^3.3.1",
+    "framer-motion": "^12.35.2",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.0.17",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.0.17",
-    "typescript": "^5"
+    "@tailwindcss/postcss": "^4.2.1",
+    "@types/node": "^25.4.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "autoprefixer": "^10.4.27",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
   }
 }
