@@ -3,6 +3,8 @@ import type { Metadata } from 'next';
 import { PageShell, SectionIntro, SurfaceCard, TagPill, ThoughtCard, actionClasses } from '@/components';
 import { getAllThoughts } from '@/db/queries';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Thoughts - The Saish Project',
   description: 'A simple archive of notes on learning design, experimentation, and building useful things.',

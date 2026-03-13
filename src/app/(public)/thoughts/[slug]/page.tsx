@@ -5,6 +5,8 @@ import { PageShell, SurfaceCard, TagPill, ThoughtCard, actionClasses, textLinkCl
 import { ThoughtContentRenderer } from '@/components/ThoughtContent';
 import { getThoughtBySlug, getAllThoughts } from '@/db/queries';
 
+export const dynamic = 'force-dynamic';
+
 const fullThoughtDateFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'long',
   day: 'numeric',
