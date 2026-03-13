@@ -75,7 +75,7 @@ export type ProjectsResponse = ApiResponse<{
 export type CareerResponse = ApiResponse<CareerEntry[]>;
 
 /**
- * Structured content block for a thought post
+ * Structured content block for a thought post (legacy format)
  */
 export interface ThoughtSection {
   /** Optional section heading */
@@ -83,6 +83,27 @@ export interface ThoughtSection {
   /** Paragraphs shown within the section */
   paragraphs: string[];
 }
+
+/**
+ * Tiptap ProseMirror JSON document
+ */
+export interface TiptapDoc {
+  type: 'doc';
+  content: TiptapNode[];
+}
+
+export interface TiptapNode {
+  type: string;
+  attrs?: Record<string, unknown>;
+  content?: TiptapNode[];
+  marks?: { type: string; attrs?: Record<string, unknown> }[];
+  text?: string;
+}
+
+/**
+ * Content stored in the DB — either new Tiptap JSON or legacy ThoughtSection[]
+ */
+export type ThoughtContent = TiptapDoc | ThoughtSection[];
 
 /**
  * Represents a blog-style thought post
@@ -100,8 +121,8 @@ export interface ThoughtPost {
   readingTime: string;
   /** Tags used for lightweight categorization */
   tags: string[];
-  /** Structured post content */
-  content: ThoughtSection[];
+  /** Post content — Tiptap JSON document or legacy ThoughtSection[] */
+  content: ThoughtContent;
 }
 
 /**

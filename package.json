@@ -6,13 +6,28 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "db:seed": "tsx src/db/seed.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
+    "@neondatabase/serverless": "^1.0.2",
+    "@tiptap/extension-image": "^3.20.1",
+    "@tiptap/extension-link": "^3.20.1",
+    "@tiptap/extension-placeholder": "^3.20.1",
+    "@tiptap/extension-underline": "^3.20.1",
+    "@tiptap/pm": "^3.20.1",
+    "@tiptap/react": "^3.20.1",
+    "@tiptap/starter-kit": "^3.20.1",
     "@vercel/analytics": "^2.0.0",
+    "@vercel/blob": "^2.3.1",
     "colorthief": "^3.3.1",
+    "drizzle-orm": "^0.45.1",
     "framer-motion": "^12.35.2",
+    "jose": "^6.2.1",
     "next": "^16.1.6",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
@@ -23,8 +38,10 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.27",
+    "drizzle-kit": "^0.31.9",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.1",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

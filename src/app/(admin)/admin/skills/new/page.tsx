@@ -1,0 +1,39 @@
+import { redirect } from 'next/navigation';
+import { createSkill, getSkillCategories } from '../../_actions/skills';
+import { FormField, FormSelect } from '@/components/admin/FormField';
+
+const proficiencyOptions = [
+  { value: 'Expert', label: 'Expert' },
+  { value: 'Advanced', label: 'Advanced' },
+  { value: 'Intermediate', label: 'Intermediate' },
+  { value: 'Basic-Intermediate', label: 'Basic-Intermediate' },
+  { value: '-', label: 'N/A (Certification)' },
+];
+
+export default async function NewSkillPage() {
+  const categories = await getSkillCategories();
+  const categoryOptions = categories.map((c) => ({ value: String(c.id), label: c.category }));
+
+  async function handleCreate(formData: FormData) {
+    'use server';
+    await createSkill(formData);
+    redirect('/admin/skills');
+  }
+
+  return (
+    <div className="mx-auto max-w-2xl space-y-6">
+      <h1 className="text-2xl font-semibold text-ink">New Skill</h1>
+
+      <form action={handleCreate} className="surface-card space-y-4 p-6">
+        <FormSelect label="Category" name="categoryId" options={categoryOptions} required />
+        <FormField label="Skill Name" name="name" required />
+        <FormSelect label="Proficiency" name="proficiency" options={proficiencyOptions} required />
+        <FormField label="Context" name="context" placeholder="Brief description of experience" required />
+
+        <div className="flex gap-3 pt-2">
+          <button type="submit" className="btn-base btn-primary">Create Skill</button>
+        </div>
+      </form>
+    </div>
+  );
+}

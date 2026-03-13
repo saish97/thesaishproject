@@ -3,7 +3,6 @@ import { IBM_Plex_Sans, Newsreader } from 'next/font/google';
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { Analytics } from '@vercel/analytics/react';
-import { AnimationProvider, BackgroundPattern, NavMenu, ScrollProgress, ScrollToTop } from '@/components';
 
 const bodyFont = IBM_Plex_Sans({
   subsets: ['latin'],
@@ -83,21 +82,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${bodyFont.variable} ${displayFont.variable} scroll-smooth`}>
-      <body>
+      <body suppressHydrationWarning>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-[var(--accent)] focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white"
         >
           Skip to content
         </a>
-        <AnimationProvider>
-          <BackgroundPattern />
-          <NavMenu />
-          <ScrollProgress />
-          {children}
-          <Analytics />
-          <ScrollToTop />
-        </AnimationProvider>
+        {children}
+        <Analytics />
       </body>
     </html>
   );

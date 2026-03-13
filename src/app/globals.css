@@ -7,7 +7,8 @@
   --surface-rgb: 255 251 244;
   --surface-strong: rgba(255, 248, 239, 0.96);
   --surface-strong-rgb: 255 248 239;
-  --surface-solid: #fff8ef;
+  /* --surface-solid: #fff8ef; */
+  --surface-solid: #FAF7F0;
   --text: #1d2721;
   --text-muted: #5d675f;
   --accent: #216b67;
@@ -21,6 +22,8 @@
   --radius-card: 1.5rem;
   --radius-panel: 2rem;
   --radius-pill: 999px;
+  --selection-bg: #216b67;
+  --selection-text: #fff;
 }
 
 html.dark {
@@ -41,6 +44,8 @@ html.dark {
   --border-strong: rgba(237, 242, 237, 0.18);
   --shadow-card: 0 20px 48px -34px rgba(0, 0, 0, 0.55);
   --shadow-panel: 0 36px 100px -52px rgba(0, 0, 0, 0.62);
+  --selection-bg: rgba(121, 185, 176, 0.48);
+  --selection-text: #fff;
 }
 
 @layer base {
@@ -105,8 +110,8 @@ html.dark {
   }
 
   ::selection {
-    background: rgba(var(--accent-rgb), 0.2);
-    color: var(--text);
+    background: var(--selection-bg);
+    color: var(--selection-text);
   }
 
   a {

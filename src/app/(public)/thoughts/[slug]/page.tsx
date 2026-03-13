@@ -2,7 +2,8 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { PageShell, SurfaceCard, TagPill, ThoughtCard, actionClasses, textLinkClassName } from '@/components';
-import { getThoughtBySlug, thoughtPosts } from '@/data/thoughts';
+import { ThoughtContentRenderer } from '@/components/ThoughtContent';
+import { getThoughtBySlug, getAllThoughts } from '@/db/queries';
 
 const fullThoughtDateFormatter = new Intl.DateTimeFormat('en-US', {
   month: 'long',
@@ -16,15 +17,16 @@ type ThoughtPostPageProps = {
   }>;
 };
 
-export function generateStaticParams() {
-  return thoughtPosts.map((post) => ({
+export async function generateStaticParams() {
+  const posts = await getAllThoughts();
+  return posts.map((post) => ({
     slug: post.slug,
   }));
 }
 
 export async function generateMetadata({ params }: ThoughtPostPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getThoughtBySlug(slug);
+  const post = await getThoughtBySlug(slug);
 
   if (!post) {
     return {
@@ -43,13 +45,14 @@ export async function generateMetadata({ params }: ThoughtPostPageProps): Promis
 
 export default async function ThoughtPostPage({ params }: ThoughtPostPageProps) {
   const { slug } = await params;
-  const post = getThoughtBySlug(slug);
+  const post = await getThoughtBySlug(slug);
 
   if (!post) {
     notFound();
   }
 
-  const moreThoughts = thoughtPosts.filter((thought) => thought.slug !== post.slug).slice(0, 2);
+  const allThoughts = await getAllThoughts();
+  const moreThoughts = allThoughts.filter((thought) => thought.slug !== post.slug).slice(0, 2);
 
   return (
     <PageShell contentClassName="max-w-5xl space-y-8">
@@ -76,16 +79,7 @@ export default async function ThoughtPostPage({ params }: ThoughtPostPageProps) 
       </SurfaceCard>
 
       <SurfaceCard tone="panel" className="space-y-10 p-8 md:p-12">
-        {post.content.map((section, index) => (
-          <section key={`${post.slug}-${index}`} className="space-y-5">
-            {section.heading ? <h2 className="text-2xl leading-tight text-ink">{section.heading}</h2> : null}
-            {section.paragraphs.map((paragraph, paragraphIndex) => (
-              <p key={`${post.slug}-${index}-${paragraphIndex}`} className="text-base leading-8 text-dim md:text-lg">
-                {paragraph}
-              </p>
-            ))}
-          </section>
-        ))}
+        <ThoughtContentRenderer content={post.content} />
       </SurfaceCard>
 
       {moreThoughts.length ? (

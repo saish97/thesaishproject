@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { PageShell, SectionIntro, SurfaceCard, TagPill, ThoughtCard, actionClasses } from '@/components';
-import { thoughtPosts } from '@/data/thoughts';
+import { getAllThoughts } from '@/db/queries';
 
 export const metadata: Metadata = {
   title: 'Thoughts - The Saish Project',
@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ThoughtsPage() {
+export default async function ThoughtsPage() {
+  const thoughtPosts = await getAllThoughts();
   const [featuredThought, ...archiveThoughts] = thoughtPosts;
 
   return (

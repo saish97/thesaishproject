@@ -17,14 +17,13 @@ import {
   actionClasses,
   cx,
 } from '@/components';
-import { getFeaturedThoughts } from '@/data/thoughts';
-import { useCareer, useProjects } from '@/hooks';
+import { useCareer, useProjects, useThoughts } from '@/hooks';
 import { Project } from '@/types';
 import { fadeInUp } from '@/utils/animations';
 import { ProjectGrid, ProjectModal, Timeline } from '@/utils/dynamic';
 
 export default function Home() {
-  const featuredThoughts = getFeaturedThoughts();
+  const { thoughts: featuredThoughts, loading: thoughtsLoading, error: thoughtsError } = useThoughts();
   const { projects, loading: projectsLoading, error: projectsError } = useProjects();
   const { entries: careerEntries, loading: careerLoading, error: careerError } = useCareer();
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
@@ -47,16 +46,16 @@ export default function Home() {
         label: 'selected project case studies and experiments',
       },
       {
-        value: String(featuredThoughts.length).padStart(2, '0'),
+        value: thoughtsLoading ? '--' : String(featuredThoughts.length).padStart(2, '0'),
         label: 'published thoughts on making useful systems',
       },
     ],
-    [careerEntries.length, careerLoading, featuredThoughts.length, projects.length, projectsLoading],
+    [careerEntries.length, careerLoading, featuredThoughts.length, projects.length, projectsLoading, thoughtsLoading],
   );
 
   const projectCountLabel = projectsLoading ? 'selected projects loading' : `${String(projects.length).padStart(2, '0')} selected projects`;
   const timelineCountLabel = careerLoading ? 'career entries loading' : `${String(careerEntries.length).padStart(2, '0')} career entries`;
-  const thoughtCountLabel = `${String(featuredThoughts.length).padStart(2, '0')} featured thoughts`;
+  const thoughtCountLabel = thoughtsLoading ? 'featured thoughts loading' : `${String(featuredThoughts.slice(0, 3).length).padStart(2, '0')} featured thoughts`;
 
   const handleProjectClick = useCallback((project: Project) => {
     setSelectedProject(project);
@@ -242,7 +241,7 @@ export default function Home() {
           </div>
 
           <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {featuredThoughts.map((post) => (
+            {featuredThoughts.slice(0, 3).map((post) => (
               <ThoughtCard key={post.slug} post={post} />
             ))}
           </div>
