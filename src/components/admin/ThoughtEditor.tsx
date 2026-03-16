@@ -118,7 +118,7 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
     },
     editorProps: {
       attributes: {
-        class: 'field-input !rounded-xl min-h-[300px] p-4 prose prose-sm max-w-none focus:outline-none',
+        class: 'field-input !rounded-xl min-h-[300px] p-4 prose prose-sm dark:prose-invert max-w-none focus:outline-none',
       },
     },
   });

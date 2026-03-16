@@ -126,7 +126,7 @@ export default function Home() {
 
           <div className="mt-8 grid gap-4 lg:grid-cols-2">
             <SurfaceCard className="p-6">
-              <TagPill>current focus</TagPill>
+              <p className="eyebrow">current focus</p>
               <h2 className="mt-4 text-2xl leading-tight text-ink">enterprise AI, learning products, and systems people can actually use.</h2>
               <p className="mt-3 text-sm leading-7 text-dim">
                 {currentRole
@@ -136,7 +136,7 @@ export default function Home() {
             </SurfaceCard>
 
             <SurfaceCard className="p-6">
-              <TagPill>base</TagPill>
+              <p className="eyebrow">base</p>
               <h2 className="mt-4 text-2xl leading-tight text-ink">dubai-based, working across digital learning, customer enablement, and AI transformation.</h2>
               <p className="mt-3 text-sm leading-7 text-dim">
                 The portfolio combines selected work, a career timeline, and short writing on design, experimentation, and consistency.
@@ -157,9 +157,9 @@ export default function Home() {
             />
 
             <div className="flex flex-col gap-4 lg:items-end lg:text-right">
-              <p className="max-w-md text-sm leading-7 text-dim">
+              {/* <p className="max-w-md text-sm leading-7 text-dim">
                 A horizontal strip keeps the images, copy, and tags at stable proportions instead of compressing the work into a broken grid.
-              </p>
+              </p> */}
               <TagPill tone="muted">{projectCountLabel}</TagPill>
             </div>
           </div>
@@ -182,9 +182,9 @@ export default function Home() {
             />
 
             <div className="flex flex-col gap-4 lg:items-end lg:text-right">
-              <p className="max-w-md text-sm leading-7 text-dim">
+              {/* <p className="max-w-md text-sm leading-7 text-dim">
                 Preview mode keeps the homepage compact. Expand it when you want the full timeline visible in the page.
-              </p>
+              </p> */}
               <TagPill tone="muted">{timelineCountLabel}</TagPill>
               <button
                 type="button"
