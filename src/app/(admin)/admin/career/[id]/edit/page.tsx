@@ -27,10 +27,13 @@ export default async function EditCareerEntryPage({ params }: EditCareerPageProp
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-semibold text-ink">Edit Career Entry</h1>
+    <div className="mx-auto max-w-2xl space-y-8">
+      <div>
+        <p className="eyebrow">Career</p>
+        <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">Edit Entry</h1>
+      </div>
 
-      <form action={handleUpdate} className="surface-card space-y-4 p-6">
+      <form action={handleUpdate} className="surface-card space-y-5 p-8">
         <FormField label="Title" name="title" defaultValue={entry.title} required />
         <FormField label="Organization" name="organization" defaultValue={entry.organization} required />
         <FormField label="Location" name="location" defaultValue={entry.location} required />
@@ -42,7 +45,7 @@ export default async function EditCareerEntryPage({ params }: EditCareerPageProp
         <FormSelect label="Type" name="type" options={careerTypes} defaultValue={entry.type} required />
         <FormTextarea label="Description" name="description" defaultValue={entry.description} rows={6} required />
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 pt-3">
           <button type="submit" className="btn-base btn-primary">Save Changes</button>
         </div>
       </form>

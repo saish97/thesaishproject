@@ -16,10 +16,13 @@ export default async function EditThoughtPage({ params }: EditThoughtPageProps) 
   const isDraft = thought.status === 'draft';
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
-      <h1 className="text-2xl font-semibold text-ink">
-        {isDraft ? 'New Thought' : 'Edit Thought'}
-      </h1>
+    <div className="mx-auto max-w-3xl space-y-8">
+      <div>
+        <p className="eyebrow">Thoughts</p>
+        <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">
+          {isDraft ? 'New Thought' : 'Edit Thought'}
+        </h1>
+      </div>
       <EditThoughtForm
         id={Number(id)}
         thought={{

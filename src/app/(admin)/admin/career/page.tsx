@@ -17,9 +17,12 @@ export default async function CareerListPage() {
   const entries = await getCareerEntries();
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold text-ink">Career Entries</h1>
+        <div>
+          <p className="eyebrow">Manage</p>
+          <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">Career Entries</h1>
+        </div>
         <Link href="/admin/career/new" className="btn-base btn-primary">
           Add Entry
         </Link>

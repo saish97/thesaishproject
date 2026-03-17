@@ -101,12 +101,12 @@ export function EditThoughtForm({ id, thought }: EditThoughtFormProps) {
   }
 
   return (
-    <form ref={formRef} action={handleSubmit} className="surface-card space-y-4 p-6">
+    <form ref={formRef} action={handleSubmit} className="surface-card space-y-5 p-8">
       {isDraft && (
-        <div className="flex items-center justify-between rounded-md border border-amber-300/30 bg-amber-50/10 px-4 py-2 text-sm text-amber-600">
-          <span>Draft — not visible to the public until published.</span>
+        <div className="flex items-center justify-between rounded-full border border-[rgba(var(--accent-rgb),0.16)] bg-[rgba(var(--accent-rgb),0.06)] px-5 py-2.5 text-sm">
+          <span className="font-medium text-accent">Draft — not visible to the public until published.</span>
           {saveStatus === 'saving' && <span className="text-xs text-dim">Saving...</span>}
-          {saveStatus === 'saved' && <span className="text-xs text-green-500">Saved</span>}
+          {saveStatus === 'saved' && <span className="text-xs text-accent">Saved</span>}
         </div>
       )}
 
@@ -125,21 +125,21 @@ export function EditThoughtForm({ id, thought }: EditThoughtFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-dim">Content</label>
-        <div className="mt-1">
+        <div className="mt-1.5">
           <ThoughtEditor initialContent={thought.content} onChange={setContent} />
         </div>
       </div>
 
-      <div className="flex items-center gap-3 pt-2">
+      <div className="flex items-center gap-3 pt-3">
         <button type="submit" className="btn-base btn-primary">
           {isDraft ? 'Publish' : 'Save Changes'}
         </button>
         {isDraft ? (
-          <button type="submit" formAction={handleSaveDraft} className="btn-base border border-current text-dim hover:text-ink">
+          <button type="submit" formAction={handleSaveDraft} className="btn-base btn-secondary">
             Save Draft
           </button>
         ) : (
-          <button type="submit" formAction={handleSaveDraft} className="btn-base border border-current text-dim hover:text-ink">
+          <button type="submit" formAction={handleSaveDraft} className="btn-base btn-secondary">
             Unpublish
           </button>
         )}
@@ -147,7 +147,7 @@ export function EditThoughtForm({ id, thought }: EditThoughtFormProps) {
           type="button"
           onClick={handleDelete}
           disabled={isDeleting}
-          className="btn-base ml-auto text-red-500 hover:bg-red-500/10 hover:text-red-400 disabled:opacity-50"
+          className="btn-base ml-auto text-red-500 transition-all duration-200 hover:bg-red-500/10 disabled:opacity-50"
         >
           {isDeleting ? 'Deleting...' : isDraft ? 'Discard Draft' : 'Delete'}
         </button>

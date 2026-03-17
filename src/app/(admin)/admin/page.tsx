@@ -27,21 +27,25 @@ export default async function AdminDashboard() {
   const counts = await getCounts();
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div>
-        <h1 className="text-3xl font-semibold text-ink">Dashboard</h1>
-        <p className="mt-2 text-sm text-dim">Manage all content on The Saish Project.</p>
+        <p className="eyebrow">Overview</p>
+        <h1 className="mt-3 text-3xl leading-[0.95] text-ink sm:text-4xl">Dashboard</h1>
+        <p className="mt-3 text-[0.95rem] leading-relaxed text-dim">Manage all content on The Saish Project.</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {sections.map((section) => (
           <Link
             key={section.key}
             href={section.href}
-            className="surface-card p-6 transition-colors hover:bg-[var(--surface-strong)]"
+            className="surface-card surface-interactive p-6"
           >
             <span className="text-2xl">{section.icon}</span>
-            <p className="mt-3 text-3xl font-semibold text-ink">
+            <p
+              className="mt-3 text-3xl font-semibold text-ink"
+              style={{ fontFamily: 'var(--font-display), serif', letterSpacing: '-0.035em' }}
+            >
               {counts[section.key]}
             </p>
             <p className="mt-1 text-sm text-dim">{section.label}</p>
@@ -49,9 +53,9 @@ export default async function AdminDashboard() {
         ))}
       </div>
 
-      <div className="surface-card p-6">
-        <h2 className="text-lg font-semibold text-ink">Quick Actions</h2>
-        <div className="mt-4 flex flex-wrap gap-3">
+      <div className="surface-panel p-8">
+        <h2 className="text-lg text-ink">Quick Actions</h2>
+        <div className="mt-5 flex flex-wrap gap-3">
           <Link href="/admin/career/new" className="btn-base btn-primary">
             New Career Entry
           </Link>

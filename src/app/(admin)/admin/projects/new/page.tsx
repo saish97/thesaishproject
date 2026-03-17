@@ -10,10 +10,13 @@ export default function NewProjectPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-semibold text-ink">New Project</h1>
+    <div className="mx-auto max-w-2xl space-y-8">
+      <div>
+        <p className="eyebrow">Projects</p>
+        <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">New Project</h1>
+      </div>
 
-      <form action={handleCreate} className="surface-card space-y-4 p-6">
+      <form action={handleCreate} className="surface-card space-y-5 p-8">
         <FormField label="Title" name="title" required />
         <FormField label="Short Description" name="description" required />
         <FormTextarea label="Long Description" name="longDescription" rows={6} required />
@@ -22,7 +25,7 @@ export default function NewProjectPage() {
         <FormField label="Demo Link" name="demoLink" placeholder="https://..." />
         <FormField label="GitHub Link" name="githubLink" placeholder="https://github.com/..." />
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 pt-3">
           <button type="submit" className="btn-base btn-primary">Create Project</button>
         </div>
       </form>

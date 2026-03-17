@@ -35,11 +35,21 @@ export default function AdminLoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="surface-card w-full max-w-sm p-8">
-        <h1 className="text-2xl font-semibold text-ink">Admin Console</h1>
-        <p className="mt-2 text-sm text-dim">Enter your password to continue.</p>
+      <div className="surface-card surface-glass w-full max-w-sm p-10">
+        <div className="text-center">
+          <p
+            className="text-[0.95rem] font-semibold text-ink"
+            style={{ fontFamily: 'var(--font-display), serif' }}
+          >
+            the.saish.project
+          </p>
+          <p className="mt-2 text-[0.72rem] font-bold uppercase tracking-[0.28em] text-accent">
+            Admin Console
+          </p>
+        </div>
+        <p className="mt-5 text-center text-sm text-dim">Enter your password to continue.</p>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-dim">
               Password
@@ -49,7 +59,7 @@ export default function AdminLoginPage() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="field-input mt-1 w-full"
+              className="field-input mt-1.5 w-full"
               placeholder="Enter admin password"
               required
               autoFocus

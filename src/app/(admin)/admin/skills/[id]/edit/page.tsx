@@ -30,16 +30,19 @@ export default async function EditSkillPage({ params }: EditSkillPageProps) {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-semibold text-ink">Edit Skill</h1>
+    <div className="mx-auto max-w-2xl space-y-8">
+      <div>
+        <p className="eyebrow">Skills</p>
+        <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">Edit Skill</h1>
+      </div>
 
-      <form action={handleUpdate} className="surface-card space-y-4 p-6">
+      <form action={handleUpdate} className="surface-card space-y-5 p-8">
         <FormSelect label="Category" name="categoryId" options={categoryOptions} defaultValue={String(skill.categoryId)} required />
         <FormField label="Skill Name" name="name" defaultValue={skill.name} required />
         <FormSelect label="Proficiency" name="proficiency" options={proficiencyOptions} defaultValue={skill.proficiency} required />
         <FormField label="Context" name="context" defaultValue={skill.context} required />
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 pt-3">
           <button type="submit" className="btn-base btn-primary">Save Changes</button>
         </div>
       </form>

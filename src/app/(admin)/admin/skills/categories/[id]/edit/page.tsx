@@ -19,13 +19,16 @@ export default async function EditSkillCategoryPage({ params }: EditSkillCategor
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-semibold text-ink">Edit Skill Category</h1>
+    <div className="mx-auto max-w-2xl space-y-8">
+      <div>
+        <p className="eyebrow">Skills</p>
+        <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">Edit Category</h1>
+      </div>
 
-      <form action={handleUpdate} className="surface-card space-y-4 p-6">
+      <form action={handleUpdate} className="surface-card space-y-5 p-8">
         <FormField label="Category Name" name="category" defaultValue={category.category} required />
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 pt-3">
           <button type="submit" className="btn-base btn-primary">Save Changes</button>
         </div>
       </form>

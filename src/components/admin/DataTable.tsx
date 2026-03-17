@@ -33,13 +33,13 @@ export function DataTable<T>({
               {columns.map((col) => (
                 <th
                   key={String(col.header)}
-                  className={`px-4 py-3 text-xs font-semibold uppercase tracking-wider text-dim ${col.className ?? ''}`}
+                  className={`px-5 py-3.5 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-dim ${col.className ?? ''}`}
                 >
                   {col.header}
                 </th>
               ))}
               {(editHref || viewHref || onDelete) && (
-                <th className="px-4 py-3 text-xs font-semibold uppercase tracking-wider text-dim">
+                <th className="px-5 py-3.5 text-[0.7rem] font-bold uppercase tracking-[0.14em] text-dim">
                   Actions
                 </th>
               )}
@@ -47,21 +47,21 @@ export function DataTable<T>({
           </thead>
           <tbody>
             {data.map((row, i) => (
-              <tr key={i} className="border-b border-[var(--border)] last:border-0">
+              <tr key={i} className="border-b border-[var(--border)] transition-colors duration-200 last:border-0 hover:bg-[rgba(var(--accent-rgb),0.04)]">
                 {columns.map((col) => (
-                  <td key={String(col.header)} className={`px-4 py-3 text-ink ${col.className ?? ''}`}>
+                  <td key={String(col.header)} className={`px-5 py-3.5 text-ink ${col.className ?? ''}`}>
                     {typeof col.accessor === 'function'
                       ? col.accessor(row)
                       : String(row[col.accessor] ?? '')}
                   </td>
                 ))}
                 {(editHref || viewHref || onDelete) && (
-                  <td className="px-4 py-3">
-                    <div className="flex items-center gap-2">
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-3">
                       {editHref && (
                         <Link
                           href={editHref(row)}
-                          className="text-sm font-medium text-[var(--accent)] hover:underline"
+                          className="text-link text-sm font-medium"
                         >
                           Edit
                         </Link>
@@ -69,7 +69,7 @@ export function DataTable<T>({
                       {viewHref && viewHref(row) && (
                         <Link
                           href={viewHref(row)!}
-                          className="text-sm font-medium text-[var(--accent)] hover:underline"
+                          className="text-link text-sm font-medium"
                         >
                           View
                         </Link>
@@ -84,7 +84,7 @@ export function DataTable<T>({
             ))}
             {data.length === 0 && (
               <tr>
-                <td colSpan={columns.length + ((editHref || viewHref || onDelete) ? 1 : 0)} className="px-4 py-8 text-center text-dim">
+                <td colSpan={columns.length + ((editHref || viewHref || onDelete) ? 1 : 0)} className="px-5 py-12 text-center text-dim">
                   No entries found.
                 </td>
               </tr>

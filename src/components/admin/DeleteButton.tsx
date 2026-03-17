@@ -15,7 +15,7 @@ export function DeleteButton({ onDelete, itemLabel = 'this item' }: DeleteButton
     return (
       <button
         onClick={() => setConfirming(true)}
-        className="text-sm font-medium text-red-500 hover:underline"
+        className="rounded-full px-2.5 py-1 text-sm font-medium text-red-500 transition-all duration-200 hover:bg-red-500/10"
       >
         Delete
       </button>
@@ -33,13 +33,13 @@ export function DeleteButton({ onDelete, itemLabel = 'this item' }: DeleteButton
           });
         }}
         disabled={isPending}
-        className="text-sm font-medium text-red-500 hover:underline"
+        className="rounded-full px-2.5 py-1 text-sm font-medium text-red-500 transition-all duration-200 hover:bg-red-500/10 disabled:opacity-50"
       >
         {isPending ? 'Deleting...' : 'Confirm'}
       </button>
       <button
         onClick={() => setConfirming(false)}
-        className="text-sm text-dim hover:underline"
+        className="rounded-full px-2.5 py-1 text-sm text-dim transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink"
       >
         Cancel
       </button>

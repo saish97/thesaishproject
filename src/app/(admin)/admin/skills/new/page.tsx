@@ -21,16 +21,19 @@ export default async function NewSkillPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-semibold text-ink">New Skill</h1>
+    <div className="mx-auto max-w-2xl space-y-8">
+      <div>
+        <p className="eyebrow">Skills</p>
+        <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">New Skill</h1>
+      </div>
 
-      <form action={handleCreate} className="surface-card space-y-4 p-6">
+      <form action={handleCreate} className="surface-card space-y-5 p-8">
         <FormSelect label="Category" name="categoryId" options={categoryOptions} required />
         <FormField label="Skill Name" name="name" required />
         <FormSelect label="Proficiency" name="proficiency" options={proficiencyOptions} required />
         <FormField label="Context" name="context" placeholder="Brief description of experience" required />
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 pt-3">
           <button type="submit" className="btn-base btn-primary">Create Skill</button>
         </div>
       </form>

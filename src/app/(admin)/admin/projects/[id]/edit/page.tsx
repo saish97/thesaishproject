@@ -19,10 +19,13 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
   }
 
   return (
-    <div className="mx-auto max-w-2xl space-y-6">
-      <h1 className="text-2xl font-semibold text-ink">Edit Project</h1>
+    <div className="mx-auto max-w-2xl space-y-8">
+      <div>
+        <p className="eyebrow">Projects</p>
+        <h1 className="mt-3 text-2xl leading-[0.95] text-ink sm:text-3xl">Edit Project</h1>
+      </div>
 
-      <form action={handleUpdate} className="surface-card space-y-4 p-6">
+      <form action={handleUpdate} className="surface-card space-y-5 p-8">
         <FormField label="Title" name="title" defaultValue={project.title} required />
         <FormField label="Short Description" name="description" defaultValue={project.description} required />
         <FormTextarea label="Long Description" name="longDescription" defaultValue={project.longDescription} rows={6} required />
@@ -31,7 +34,7 @@ export default async function EditProjectPage({ params }: EditProjectPageProps) 
         <FormField label="Demo Link" name="demoLink" defaultValue={project.demoLink ?? ''} />
         <FormField label="GitHub Link" name="githubLink" defaultValue={project.githubLink ?? ''} />
 
-        <div className="flex gap-3 pt-2">
+        <div className="flex gap-3 pt-3">
           <button type="submit" className="btn-base btn-primary">Save Changes</button>
         </div>
       </form>

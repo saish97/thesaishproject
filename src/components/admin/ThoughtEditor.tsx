@@ -118,7 +118,7 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
     },
     editorProps: {
       attributes: {
-        class: 'field-input !rounded-xl min-h-[300px] p-4 prose prose-sm dark:prose-invert max-w-none focus:outline-none',
+        class: 'field-input !rounded-xl min-h-[300px] p-4 prose prose-sm max-w-none focus:outline-none [--tw-prose-body:var(--text)] [--tw-prose-headings:var(--accent)] [--tw-prose-bold:var(--text)] [--tw-prose-quotes:var(--text-muted)] [--tw-prose-quote-borders:var(--accent)] [--tw-prose-counters:var(--text-muted)] [--tw-prose-bullets:var(--text-muted)] [--tw-prose-hr:var(--border)]',
       },
     },
   });
@@ -129,14 +129,14 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center gap-1 border-b border-[var(--border)] pb-2">
+      <div className="floating-control flex flex-wrap items-center gap-1 rounded-2xl px-3 py-2">
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-          className={`rounded px-2 py-1 text-xs font-medium ${
+          className={`rounded-full px-2.5 py-1.5 text-xs font-medium transition-all duration-200 ${
             editor.isActive('heading', { level: 2 })
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           H2
@@ -144,10 +144,10 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBold().run()}
-          className={`rounded px-2 py-1 text-xs font-bold ${
+          className={`rounded-full px-2.5 py-1.5 text-xs font-bold transition-all duration-200 ${
             editor.isActive('bold')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           B
@@ -155,10 +155,10 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleItalic().run()}
-          className={`rounded px-2 py-1 text-xs italic ${
+          className={`rounded-full px-2.5 py-1.5 text-xs italic transition-all duration-200 ${
             editor.isActive('italic')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           I
@@ -166,10 +166,10 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleStrike().run()}
-          className={`rounded px-2 py-1 text-xs line-through ${
+          className={`rounded-full px-2.5 py-1.5 text-xs line-through transition-all duration-200 ${
             editor.isActive('strike')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           S
@@ -177,35 +177,35 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleUnderline().run()}
-          className={`rounded px-2 py-1 text-xs underline ${
+          className={`rounded-full px-2.5 py-1.5 text-xs underline transition-all duration-200 ${
             editor.isActive('underline')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           U
         </button>
 
-        <span className="mx-1 h-4 w-px bg-[var(--border)]" />
+        <span className="mx-1.5 h-4 w-px bg-[rgba(var(--accent-rgb),0.16)]" />
 
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
-          className={`rounded px-2 py-1 text-xs ${
+          className={`rounded-full px-2.5 py-1.5 text-xs transition-all duration-200 ${
             editor.isActive('bulletList')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
-          • List
+          &bull; List
         </button>
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
-          className={`rounded px-2 py-1 text-xs ${
+          className={`rounded-full px-2.5 py-1.5 text-xs transition-all duration-200 ${
             editor.isActive('orderedList')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           1. List
@@ -213,10 +213,10 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
         <button
           type="button"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
-          className={`rounded px-2 py-1 text-xs ${
+          className={`rounded-full px-2.5 py-1.5 text-xs transition-all duration-200 ${
             editor.isActive('blockquote')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           &ldquo; Quote
@@ -224,20 +224,20 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
         <button
           type="button"
           onClick={() => editor.chain().focus().setHorizontalRule().run()}
-          className="rounded px-2 py-1 text-xs text-dim hover:bg-[var(--surface-strong)]"
+          className="rounded-full px-2.5 py-1.5 text-xs text-dim transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink"
         >
           ― Rule
         </button>
 
-        <span className="mx-1 h-4 w-px bg-[var(--border)]" />
+        <span className="mx-1.5 h-4 w-px bg-[rgba(var(--accent-rgb),0.16)]" />
 
         <button
           type="button"
           onClick={setLink}
-          className={`rounded px-2 py-1 text-xs ${
+          className={`rounded-full px-2.5 py-1.5 text-xs transition-all duration-200 ${
             editor.isActive('link')
-              ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
-              : 'text-dim hover:bg-[var(--surface-strong)]'
+              ? 'bg-[rgba(var(--accent-rgb),0.12)] text-accent'
+              : 'text-dim hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink'
           }`}
         >
           Link
@@ -245,7 +245,7 @@ export function ThoughtEditor({ initialContent, onChange }: ThoughtEditorProps) 
         <button
           type="button"
           onClick={addImage}
-          className="rounded px-2 py-1 text-xs text-dim hover:bg-[var(--surface-strong)]"
+          className="rounded-full px-2.5 py-1.5 text-xs text-dim transition-all duration-200 hover:bg-[rgba(var(--accent-rgb),0.06)] hover:text-ink"
         >
           Image
         </button>

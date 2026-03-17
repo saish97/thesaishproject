@@ -33,15 +33,15 @@ export function AdminHeader() {
   }
 
   return (
-    <header className="border-b border-[var(--border)] bg-[var(--surface)] px-6 py-4">
+    <header className="border-b border-[var(--border)] bg-[var(--surface)] px-6 py-4 backdrop-blur-sm">
       <nav className="flex items-center gap-2 text-sm text-dim">
         {crumbs.map((crumb, i) => (
           <span key={crumb.href} className="flex items-center gap-2">
-            {i > 0 && <span aria-hidden>/</span>}
+            {i > 0 && <span className="text-[var(--accent)]/40" aria-hidden>/</span>}
             {i === crumbs.length - 1 ? (
               <span className="font-medium text-ink">{crumb.label}</span>
             ) : (
-              <Link href={crumb.href} className="hover:text-ink">
+              <Link href={crumb.href} className="transition-colors duration-200 hover:text-accent">
                 {crumb.label}
               </Link>
             )}
